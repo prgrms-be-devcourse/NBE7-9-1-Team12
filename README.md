@@ -31,14 +31,29 @@
 
 ## 🛠️ 기술 스택
 
-| 분야 | 기술 |
-|------|------|
-| Language | Java 21 |
-| Framework | Spring Boot 3.x |
-| Database | H2 (dev), MySQL (prod) |
-| ORM | Spring Data JPA (Hibernate) |
-| Build Tool | Kotlin |
-| Version Control | GitHub |
+### Backend
+- **Java 21** : 최신 LTS 이후 버전 사용, 성능 및 언어 기능 향상
+- **Spring Boot 3.5.6** : 애플리케이션 프레임워크
+- **Spring Data JPA (Hibernate)** : ORM 기반 데이터 액세스 계층
+
+### Database
+- **H2 Database** : 개발 및 테스트 환경용 인메모리/파일형 DB
+- **MySQL** : 운영 환경용 RDBMS
+- **MySQL Connector/J** : MySQL 연결 드라이버
+
+### Build & Dependency Management
+- **Gradle (Kotlin DSL)** : 프로젝트 빌드 및 의존성 관리
+- **Spring Dependency Management Plugin (1.1.7)** : BOM 관리
+
+### Development Tools
+- **IntelliJ IDEA** : 주요 개발 환경 (IDE)
+- **Spring Boot DevTools** : 개발 편의 기능 (자동 리스타트 등)
+- **Lombok** : 반복 코드 제거 (Getter, Setter, Builder 자동 생성)
+
+### Testing
+- **JUnit 5 (JUnit Platform)** : 단위 및 통합 테스트
+- **Spring Boot Starter Test** : Spring 테스트 유틸리티
+
 
 ---
 
