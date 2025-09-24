@@ -40,7 +40,7 @@ public class OrderService {
         Cart cart = cartRepository.findById(orderDto.getCartId())
                 .orElseThrow(() -> new RuntimeException("장바구니를 찾을 수 없습니다."));
 
-        if (!cart.getOwnerEmail().equals(orderDto.getCustomerEmail())) {
+        if (!cart.getCustomer().getEmail().equals(orderDto.getCustomerEmail())) {
             throw new RuntimeException("장바구니 소유자가 일치하지 않습니다.");
         }
 
