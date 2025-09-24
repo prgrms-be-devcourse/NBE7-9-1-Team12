@@ -26,7 +26,7 @@ public class CartController {
     @PostMapping("/carts")
     public RsData<NewCartResBody> createCart() {
         Cart newCart = cartService.createCart();
-        Long cartId = newCart.getCartId();
+        Long cartId = newCart.getId();
         return new RsData<>(
                 "201-1",
                 "새로운 장바구니가 생성되었습니다.",
