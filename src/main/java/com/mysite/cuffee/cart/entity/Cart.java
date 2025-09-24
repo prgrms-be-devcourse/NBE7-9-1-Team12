@@ -1,5 +1,6 @@
 package com.mysite.cuffee.cart.entity;
 
+import com.mysite.cuffee.order.entity.Customer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,8 +18,8 @@ public class Cart{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartId;
 
-    @Column(length = 200)
-    private String ownerEmail;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Customer customer;
 
     private LocalDateTime orderDate;
 
@@ -27,9 +28,5 @@ public class Cart{
 
     public int totalPrice() {
         return items.stream().mapToInt(i -> i.getUnitPrice() * i.getQty()).sum();
-    }
-
-    public void setOwnerEmail(String email) {
-        this.ownerEmail = email;
     }
 }
