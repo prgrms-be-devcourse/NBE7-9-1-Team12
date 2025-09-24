@@ -29,7 +29,7 @@ public class CartService {
     public CartItem CreateItem(Cart cart, Coffee coffee) {
         CartItem newItem = new CartItem();
         newItem.setCart(cart);
-        newItem.setProductId(coffee.getId());
+        newItem.setProductId(coffee.getCoffeeId());
         newItem.setProductName(coffee.getName());
         newItem.setUnitPrice(coffee.getPrice());
         newItem.setQty(1);
