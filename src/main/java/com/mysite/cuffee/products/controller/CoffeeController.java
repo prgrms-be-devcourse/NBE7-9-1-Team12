@@ -22,7 +22,21 @@ public class CoffeeController {
         return coffeeService.getAllCoffeeNames();
     }
 
+    // [GET] /coffee/prices : 원두 별 가격 목록
+    @GetMapping("/prices")
+    public List<Integer> getAllCoffeePrices(){
+        return coffeeService.getAllCoffeePrices();
+    }
 
+    // [GET] /coffee/contents : 원두 별 설명 목록
+    @GetMapping("/contents")
+    public List<String> getAllCoffeeContents(){
+        return coffeeService.getAllCoffeeContents();
+    }
 
-    //---------------------------------------------------------------
+    // [GET] /coffee/contents : 원두 별 이미지 목록
+    @GetMapping("/images")
+    public List<String> getAllCoffeeImages(){
+        return coffeeService.getAllCoffeeImageUrls();
+    }
 }
