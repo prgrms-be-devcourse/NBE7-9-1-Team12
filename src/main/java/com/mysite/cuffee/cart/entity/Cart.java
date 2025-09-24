@@ -3,7 +3,6 @@ package com.mysite.cuffee.cart.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ public class Cart{
     @Column(length = 200)
     private String ownerEmail;
 
-    @LastModifiedDate
     private LocalDateTime orderDate;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
