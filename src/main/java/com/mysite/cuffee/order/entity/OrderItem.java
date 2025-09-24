@@ -1,5 +1,6 @@
 package com.mysite.cuffee.order.entity;
 
+import com.mysite.cuffee.cart.entity.Cart;
 import com.mysite.cuffee.products.entity.Coffee;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,9 +19,9 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderItemId;
 
-//    @ManyToOne
-//    @JoinColumn(name = "cart_key")
-//    private Cart cart;
+    @ManyToOne
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
     @ManyToOne
     @JoinColumn(name = "coffee_id")
