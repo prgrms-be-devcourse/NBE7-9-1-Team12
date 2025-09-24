@@ -19,5 +19,5 @@ public class CustomerDto {
 
     @NotEmpty(message = "우편번호는 필수항목입니다.")
     @Size(min = 5, max=5)
-    private String zipCode;
+    private String zipcode;
 }

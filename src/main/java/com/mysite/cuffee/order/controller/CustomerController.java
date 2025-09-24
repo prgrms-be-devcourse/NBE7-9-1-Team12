@@ -1,8 +1,8 @@
 package com.mysite.cuffee.order.controller;
 
-import com.mysite.cuffee.order.dto.OrderDto;
-import com.mysite.cuffee.order.entity.OrderItem;
-import com.mysite.cuffee.order.service.OrderService;
+import com.mysite.cuffee.order.dto.CustomerDto;
+import com.mysite.cuffee.order.entity.Customer;
+import com.mysite.cuffee.order.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,19 +10,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/coffee")
-public class OrderController {
+public class CustomerController {
 
-    private final OrderService orderService;
+    private final CustomerService customerService;
 
-    @PostMapping("/pay")
-    public OrderItem createOrder(@Valid @RequestBody OrderDto orderDto){
+    @PostMapping("/user")
+    public Customer createCustomer(@Valid @RequestBody CustomerDto customerDto){
 
-        OrderItem orderItem = orderService.create(orderDto);
-        return orderItem;
+        Customer customer = customerService.create(customerDto);
+        return customer;
     }
-
 }
