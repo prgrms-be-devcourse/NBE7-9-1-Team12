@@ -34,7 +34,7 @@ public class CartController {
     }
     @DeleteMapping("/carts/items/{id}")
     public RsData<String> removeCartItem(
-            @PathVariable("id") int id
+            @PathVariable("id") long id
     ) {
         cartService.removeCartItem(id);
         return new RsData<>(
@@ -45,7 +45,7 @@ public class CartController {
 
     @PostMapping("/carts/items/{id}/increase")
     public RsData<String> increaseItemQty(
-            @PathVariable("id") int id
+            @PathVariable("id") long id
     ) {
         cartService.increaseItemQuantity(id);
         return new RsData<>(
@@ -56,7 +56,7 @@ public class CartController {
 
     @PostMapping("/carts/items/{id}/decrease")
     public RsData<String> decreaseQty(
-            @PathVariable("id") int id
+            @PathVariable("id") long id
     ) {
         cartService.decreaseItemQuantity(id);
         return new RsData<>(
