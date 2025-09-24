@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @Entity
 @Table(name = "coffee")
-public class coffee {
+public class Coffee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public class coffee {
     private String name;
 
     @Column(nullable = false)
-    private double price;
+    private int price;
 
     @Column(name = "contents", length =1000)
     private String contents;
