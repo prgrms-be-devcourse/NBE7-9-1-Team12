@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @Getter
 @Setter
@@ -27,4 +29,6 @@ public class OrderItem {
     private int quantity;
 
     private int subtotalPrice;
+
+    private LocalDateTime createDate;
 }
