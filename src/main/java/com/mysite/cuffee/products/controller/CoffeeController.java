@@ -22,17 +22,7 @@ public class CoffeeController {
         return coffeeService.getAllCoffeeNames();
     }
 
-    @PostMapping("/order/{id}")
-    public ResponseEntity<String> addToCart(@PathVariable int id) {
-        coffeeService.addToCart(id);
-        return ResponseEntity.ok("커피가 성공적으로 담겼습니다.");
-    }
 
-    @DeleteMapping("/order/{id}")
-    public ResponseEntity<String> removeFromCart(@PathVariable int id){
-        coffeeService.removeFromCart(id);
-        return ResponseEntity.ok("커피가 성공적으로 삭제되었습니다.");
-    }
 
     //---------------------------------------------------------------
 }
