@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @NoArgsConstructor
 @Getter @Setter
 @Entity
@@ -13,7 +12,7 @@ import lombok.Setter;
         indexes=@Index(name="ux_cart_product", columnList="cart_id, productId", unique = true))
 public class CartItem {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "cart_id")
     private Cart cart;
