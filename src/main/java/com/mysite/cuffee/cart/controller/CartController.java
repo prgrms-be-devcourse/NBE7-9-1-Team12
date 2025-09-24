@@ -50,12 +50,14 @@ public class CartController {
         cartService.increaseItemQuantity(id);
         return new RsData<>(
                 "200-2",
-                "장바구니 아이템 수량이 증가되었습니다."
+                "상품 수량이 1 증가되었습니다."
         );
     }
 
     @PostMapping("/carts/items/{id}/decrease")
-    public RsData<String> decreaseQty(@PathVariable("id") int id) {
+    public RsData<String> decreaseQty(
+            @PathVariable("id") int id
+    ) {
         cartService.decreaseItemQuantity(id);
         return new RsData<>(
                 "200-3",

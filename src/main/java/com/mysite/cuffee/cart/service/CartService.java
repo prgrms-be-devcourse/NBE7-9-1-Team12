@@ -49,20 +49,20 @@ public class CartService {
         return cart.getItems();
     }
 
-    public void removeCartItem(int id) {
+    public void removeCartItem(long id) {
         if (!cartItemRepository.existsById(id)) {
             throw new IllegalArgumentException("해당 아이템을 찾을 수 없습니다: " + id);
         }
         cartItemRepository.deleteById(id);
     }
 
-    public void increaseItemQuantity(int id) {
+    public void increaseItemQuantity(long id) {
         CartItem item = cartItemRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("장바구니에 해당 상품이 없습니다. ID: " + id));
         item.setQty(item.getQty() + 1);
     }
 
-    public void decreaseItemQuantity(int id) {
+    public void decreaseItemQuantity(long id) {
         CartItem item = cartItemRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("장바구니에 해당 상품이 없습니다. ID: " + id));
         if (item.getQty() > 1) {
