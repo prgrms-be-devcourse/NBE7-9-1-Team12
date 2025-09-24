@@ -21,23 +21,6 @@ public class CoffeeService {
                 .toList();
     }
 
-    public void addToCart(int id){
-        Coffee coffee = coffeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(id+"번 커피가 존재하지 않습니다."));
-
-        //TODO: 장바구니에 커피 추가 로직 구현
-        //  orderItemRepository.save(item);
-
-        System.out.println("장바구니에 추가됨: " + coffee.getName());
-        //임시구현 해두었음
-    }
-
-    public void removeFromCart(int id){
-        //TODO: 장바구니에서 커피 삭제 로직 구현
-        //  orderItemRepository.deleteByCoffeeId(id);
-        coffeeRepository.deleteById(id);
-    }
-
     // 가격 목록 조회
     public List<Integer> getAllCoffeePrices() {
         List<Coffee> coffees = coffeeRepository.findAll();

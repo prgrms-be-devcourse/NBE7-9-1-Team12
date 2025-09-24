@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 public class CoffeeResponseDto {
 
-    private int coffeeId;
+    private long coffeeId;
     private String name;
     private int price;
     private String contents;
