@@ -1,6 +1,8 @@
 package com.mysite.cuffee.order.service;
 
+import com.mysite.cuffee.order.dto.OrderDto;
 import com.mysite.cuffee.order.entity.Customer;
+import com.mysite.cuffee.order.entity.OrderItem;
 import com.mysite.cuffee.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,12 +13,15 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    public void createOrder(String email, String address, String zipcode){
-        Customer customer = new Customer();
-        customer.setEmail(email);
-        customer.setAddress(address);
-        customer.setZipcode(zipcode);
-        this.orderRepository.save(customer);
+    public OrderItem create(OrderDto orderDto) {
+        OrderItem orderItem = new OrderItem();
+
+//        orderItem.setCart(orderDto.getCart());
+        orderItem.setCoffee(orderDto.getCoffee());
+        orderItem.setQuantity(orderDto.getQuantity());
+        orderItem.setSubtotalPrice(orderDto.getSubtotalPrice());
+
+        return orderRepository.save(orderItem);
     }
 
 
