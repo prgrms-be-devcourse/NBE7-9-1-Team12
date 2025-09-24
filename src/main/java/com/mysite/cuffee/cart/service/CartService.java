@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -18,37 +21,31 @@ public class CartService {
     private CartItemRepository cartItemRepository;
     private CoffeeRepository coffeeRepository;
 
-    public Cart createCart(){
+    public Cart createCart() {
         Cart newCart = new Cart();
         return cartRepository.save(newCart);
     }
 
-    public Cart getCartByCartIdOrNull(int cartId){
-        return cartRepository.findById(cartId).orElse(null);
+    public CartItem CreateItem(Cart cart, Coffee coffee) {
+        CartItem newItem = new CartItem();
+        newItem.setCart(cart);
+        newItem.setProductId(coffee.getId());
+        newItem.setProductName(coffee.getName());
+        newItem.setUnitPrice(coffee.getPrice());
+        newItem.setQty(1);
+        cart.getItems().add(newItem);
+        return newItem;
     }
 
-    public CartItem getOrCreateItem(Cart cart, Coffee coffee) {
-        return cartItemRepository.findByCartIdAndProductId(cart.getCartId(), coffee.getId())
-                .orElseGet(() -> {
-                    CartItem newItem = new CartItem();
-                    newItem.setCart(cart);
-                    newItem.setProductId(coffee.getId());
-                    newItem.setProductName(coffee.getName());
-                    newItem.setUnitPrice((int) Math.round(coffee.getPrice()));
-                    newItem.setQty(0);
-                    cart.getItems().add(newItem);
-                    return newItem;
-                });
-    }
-
-    public Cart deleteCartItemByCartItemId(Cart cart, int cartItemId){
-        cartItemRepository.findByCartIdAndProductId(cart.getCartId(), cartItemId)
-                .ifPresent(cartItem -> cart.getItems().remove(cartItem));
-        return cart;
-    }
-
-    public int totalAmount(Cart cart){
+    public int totalAmount(Cart cart) {
         return cart.totalAmount();
     }
 
+    public Optional<Cart> findByCartId(int cartId) {
+        return cartRepository.findById(cartId);
+    }
+
+    public List<CartItem> getCartItems(Cart cart) {
+        return cart.getItems();
+    }
 }
