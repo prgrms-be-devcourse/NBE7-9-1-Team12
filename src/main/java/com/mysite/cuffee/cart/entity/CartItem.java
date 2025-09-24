@@ -12,12 +12,12 @@ import lombok.Setter;
         indexes=@Index(name="ux_cart_product", columnList="cart_id, productId", unique = true))
 public class CartItem {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    private Integer productId;
+    private Long productId;
     private String  productName;
     private int     unitPrice;
     private int     qty;

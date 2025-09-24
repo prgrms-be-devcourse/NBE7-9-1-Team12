@@ -37,11 +37,11 @@ public class CartService {
         return newItem;
     }
 
-    public int totalAmount(Cart cart) {
-        return cart.totalAmount();
+    public int totalPrice(Cart cart) {
+        return cart.totalPrice();
     }
 
-    public Optional<Cart> findByCartId(int cartId) {
+    public Optional<Cart> findByCartId(Long cartId) {
         return cartRepository.findById(cartId);
     }
 
