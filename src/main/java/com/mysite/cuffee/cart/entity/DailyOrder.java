@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Entity
-public class Cart extends BaseEntity {
+public class DailyOrder extends BaseEntity {
     private int totalPrice;
     private String coffeeName;
     private int quantity;
