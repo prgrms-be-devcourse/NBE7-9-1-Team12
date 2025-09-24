@@ -9,13 +9,12 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "coffee")
 public class Coffee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "coffee_id")
-    private Long id;
+    private long coffeeId;
 
     @Column(nullable = false, length = 150)
     private String name;
@@ -25,5 +24,8 @@ public class Coffee {
 
     @Column(name = "contents", length =1000)
     private String contents;
+
+    @Column(name = "image_url", length = 500)
+    private String imageUrl;
 
 }
