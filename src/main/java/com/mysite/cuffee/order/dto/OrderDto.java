@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class OrderDto {
     @NotNull
-    private String customerEmail;  // Customer ID 대신 email 사용 (Cart.ownerEmail과 매칭)
+    private String customerEmail;
 
     @NotNull
     private Long cartId;

@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -22,16 +20,14 @@ public class OrderItem {
     private Long orderItemId;
 
     @ManyToOne
-    private Customer customer;
-
-    @ManyToOne
-    @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Purchase> purchases = new ArrayList<>();
+    @ManyToOne
+    private Coffee coffee;
 
-    private int totalAmount;
+    private int quantity;
+
+    private int subtotalPrice;
 
     private LocalDateTime createDate;
 

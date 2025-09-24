@@ -6,7 +6,6 @@ import com.mysite.cuffee.cart.repository.CartRepository;
 import com.mysite.cuffee.order.dto.OrderDto;
 import com.mysite.cuffee.order.entity.Customer;
 import com.mysite.cuffee.order.entity.OrderItem;
-import com.mysite.cuffee.order.entity.Purchase;
 import com.mysite.cuffee.order.repository.CustomerRepository;
 import com.mysite.cuffee.order.repository.OrderRepository;
 import com.mysite.cuffee.products.entity.Coffee;
@@ -27,8 +26,9 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
     private final CustomerRepository customerRepository;
+    private final CoffeeRepository coffeeRepository;
 
-    public OrderItem createOrder(OrderDto orderDto) {
+    public List<OrderItem> createOrder(OrderDto orderDto) {
 
         Customer customer = customerRepository.findByEmail(orderDto.getCustomerEmail())
                 .orElseGet(() -> {
@@ -40,34 +40,27 @@ public class OrderService {
         Cart cart = cartRepository.findById(orderDto.getCartId())
                 .orElseThrow(() -> new RuntimeException("장바구니를 찾을 수 없습니다."));
 
-        if (!cart.getCustomer().getEmail().equals(orderDto.getCustomerEmail())) {
+        if (!cart.getCustomer().getEmail()
+                .equals(orderDto.getCustomerEmail())) {
             throw new RuntimeException("장바구니 소유자가 일치하지 않습니다.");
         }
 
-        OrderItem orderItem = new OrderItem();
-        orderItem.setCustomer(customer);
-        orderItem.setCart(cart);
-        orderItem.setCreateDate(LocalDateTime.now());
-
-        List<Purchase> purchases = new ArrayList<>();
-        int totalAmount = 0;
+        List<OrderItem> orderItems = new ArrayList<>();
 
         for (CartItem cartItem : cart.getItems()) {
-            Purchase purchase = new Purchase();
-            purchase.setOrderItem(orderItem);
-            purchase.setProductId(cartItem.getProductId());
-            purchase.setProductName(cartItem.getProductName());
-            purchase.setUnitPrice(cartItem.getUnitPrice());
-            purchase.setQuantity(cartItem.getQty());
-            purchase.setSubtotalPrice(cartItem.getUnitPrice() * cartItem.getQty());
+            Coffee coffee = coffeeRepository.findById(cartItem.getProductId())
+                    .orElseThrow(() -> new RuntimeException("커피 상품을 찾을 수 없습니다."));
 
-            purchases.add(purchase);
-            totalAmount += purchase.getSubtotalPrice();
+            OrderItem orderItem = new OrderItem();
+            orderItem.setCart(cart);
+            orderItem.setCoffee(coffee);
+            orderItem.setQuantity(cartItem.getQty());
+            orderItem.setSubtotalPrice(cartItem.getUnitPrice() * cartItem.getQty());
+            orderItem.setCreateDate(LocalDateTime.now());
+
+            orderItems.add(orderItem);
         }
 
-        orderItem.setPurchases(purchases);
-        orderItem.setTotalAmount(totalAmount);
-
-        return orderRepository.save(orderItem);
+        return orderRepository.saveAll(orderItems);
     }
 }

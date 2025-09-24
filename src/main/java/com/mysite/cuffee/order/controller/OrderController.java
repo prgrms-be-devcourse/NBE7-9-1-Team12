@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -20,19 +22,24 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    record OrderResponseBody(Long orderItemId, int totalAmount, int purchaseCount) {}
+    record OrderResponseBody(Long cartId, int totalAmount, int itemCount) {}
 
     @PostMapping("/pay")
     public RsData<OrderResponseBody> createOrder(@Valid @RequestBody OrderDto orderDto){
 
-        OrderItem orderItem = orderService.createOrder(orderDto);
+        List<OrderItem> orderItems = orderService.createOrder(orderDto);
+
+        int totalAmount = orderItems.stream()
+                .mapToInt(OrderItem::getSubtotalPrice)
+                .sum();
+
         return new RsData<>(
                 "201-1",
                 "주문이 성공적으로 완료되었습니다.",
                 new OrderResponseBody(
-                        orderItem.getOrderItemId(),
-                        orderItem.getTotalAmount(),
-                        orderItem.getPurchases().size()
+                        orderDto.getCartId(),
+                        totalAmount,
+                        orderItems.size()
                 )
         );
     }
