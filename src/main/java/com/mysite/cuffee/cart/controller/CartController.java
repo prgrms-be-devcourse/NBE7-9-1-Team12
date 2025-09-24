@@ -32,6 +32,36 @@ public class CartController {
                 )
         );
     }
+    @DeleteMapping("/carts/items/{id}")
+    public RsData<String> removeCartItem(
+            @PathVariable("id") int id
+    ) {
+        cartService.removeCartItem(id);
+        return new RsData<>(
+                "200-1",
+                "장바구니 아이템이 삭제되었습니다."
+        );
+    }
+
+    @PostMapping("/carts/items/{id}/increase")
+    public RsData<String> increaseItemQty(
+            @PathVariable("id") int id
+    ) {
+        cartService.increaseItemQuantity(id);
+        return new RsData<>(
+                "200-2",
+                "장바구니 아이템 수량이 증가되었습니다."
+        );
+    }
+
+    @PostMapping("/carts/items/{id}/decrease")
+    public RsData<String> decreaseQty(@PathVariable("id") int id) {
+        cartService.decreaseItemQuantity(id);
+        return new RsData<>(
+                "200-3",
+                "상품 수량이 1 감소되었습니다."
+        );
+    }
 
     record ItemLine(Long itemId, Long productId, String name, int unitPrice, int qty, int lineTotal) {
     }
