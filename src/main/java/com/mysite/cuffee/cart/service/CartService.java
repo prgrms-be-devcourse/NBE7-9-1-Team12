@@ -17,9 +17,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 public class CartService {
-    private CartRepository cartRepository;
-    private CartItemRepository cartItemRepository;
-    private CoffeeRepository coffeeRepository;
+    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
+    private final CoffeeRepository coffeeRepository;
 
     public Cart createCart() {
         Cart newCart = new Cart();
@@ -37,15 +37,39 @@ public class CartService {
         return newItem;
     }
 
-    public int totalAmount(Cart cart) {
-        return cart.totalAmount();
+    public int totalPrice(Cart cart) {
+        return cart.totalPrice();
     }
 
-    public Optional<Cart> findByCartId(int cartId) {
+    public Optional<Cart> findByCartId(Long cartId) {
         return cartRepository.findById(cartId);
     }
 
     public List<CartItem> getCartItems(Cart cart) {
         return cart.getItems();
     }
+
+    public void removeCartItem(long id) {
+        if (!cartItemRepository.existsById(id)) {
+            throw new IllegalArgumentException("해당 아이템을 찾을 수 없습니다: " + id);
+        }
+        cartItemRepository.deleteById(id);
+    }
+
+    public void increaseItemQuantity(long id) {
+        CartItem item = cartItemRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("장바구니에 해당 상품이 없습니다. ID: " + id));
+        item.setQty(item.getQty() + 1);
+    }
+
+    public void decreaseItemQuantity(long id) {
+        CartItem item = cartItemRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("장바구니에 해당 상품이 없습니다. ID: " + id));
+        if (item.getQty() > 1) {
+            item.setQty(item.getQty() - 1);
+        } else {
+            cartItemRepository.delete(item);
+        }
+    }
+
 }
