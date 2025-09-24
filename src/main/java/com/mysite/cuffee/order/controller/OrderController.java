@@ -18,10 +18,10 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @PostMapping("/pay")
+    @PostMapping("/order")
     public OrderItem createOrder(@Valid @RequestBody OrderDto orderDto){
 
-        OrderItem orderItem = orderService.create(orderDto);
+        OrderItem orderItem = orderService.createOrder(orderDto);
         return orderItem;
     }
 

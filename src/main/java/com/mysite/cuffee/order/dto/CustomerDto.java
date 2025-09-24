@@ -10,14 +10,14 @@ import lombok.Setter;
 @Setter
 public class CustomerDto {
 
-    @NotEmpty(message = "email은 필수항목입니다.")
+    @NotEmpty
     @Email
     private String email;
 
-    @NotEmpty(message = "주소는 필수항목입니다.")
+    @NotEmpty
     private String address;
 
-    @NotEmpty(message = "우편번호는 필수항목입니다.")
+    @NotEmpty
     @Size(min = 5, max=5)
     private String zipcode;
 }
