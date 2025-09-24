@@ -20,9 +20,11 @@ public class OrderItem {
     private Long orderItemId;
 
     @ManyToOne
+    @JoinColumn(name = "cart_id")
     private Cart cart;
 
     @ManyToOne
+    @JoinColumn(name = "coffee_id")
     private Coffee coffee;
 
     private int quantity;

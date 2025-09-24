@@ -34,8 +34,13 @@ public class OrderService {
                 .orElseGet(() -> {
                     Customer newCustomer = new Customer();
                     newCustomer.setEmail(orderDto.getCustomerEmail());
+                    newCustomer.setAddress(orderDto.getAddress());
+                    newCustomer.setZipcode(orderDto.getZipcode());
                     return customerRepository.save(newCustomer);
                 });
+
+        customer.setAddress(orderDto.getAddress());
+        customer.setZipcode(orderDto.getZipcode());
 
         Cart cart = cartRepository.findById(orderDto.getCartId())
                 .orElseThrow(() -> new RuntimeException("장바구니를 찾을 수 없습니다."));
