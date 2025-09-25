@@ -48,9 +48,10 @@ public class CartController {
     }
     @DeleteMapping("/carts/{cartId}/items/{id}")
     public RsData<String> removeCartItem(
+            @PathVariable("cartId") long cartId,
             @PathVariable("id") long productId
     ) {
-        cartService.removeCartItem(productId);
+        cartService.removeCartItem(cartId, productId);
         return new RsData<>(
                 "200-1",
                 "상품이 삭제되었습니다. ID: " + productId

@@ -68,11 +68,11 @@ public class CartService {
     }
 
     // 장바구니 아이템 삭제 (체크표시 해제)
-    public void removeCartItem(long productId) {
-        if (!cartItemRepository.existsById(productId)) {
-            throw new IllegalArgumentException("해당 아이템을 찾을 수 없습니다. ID: " + productId);
-        }
-        cartItemRepository.deleteById(productId);
+    public void removeCartItem(long cartId, long productId) {
+        CartItem item = cartItemRepository.findByCartIdAndProductId(cartId, productId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 아이템을 찾을 수 없습니다. ID: " + productId));
+
+        cartItemRepository.delete(item);
     }
 
     // 장바구니 아이템 수량 증가
