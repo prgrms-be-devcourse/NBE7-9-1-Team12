@@ -3,6 +3,7 @@ package com.mysite.cuffee.cart.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
 @Table(name = "cart", indexes = @Index(name = "ux_cart_key", columnList="cartKey", unique = true))
 public class Cart{

@@ -2,6 +2,7 @@ package com.mysite.cuffee.order.service;
 
 import com.mysite.cuffee.cart.entity.Cart;
 import com.mysite.cuffee.cart.entity.CartItem;
+import com.mysite.cuffee.cart.repository.CartRepository;
 import com.mysite.cuffee.cart.service.CartService;
 import com.mysite.cuffee.order.entity.Customer;
 import com.mysite.cuffee.order.entity.OrderItem;
@@ -19,6 +20,7 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final CartRepository cartRepository;
     private final CustomerRepository customerRepository;
 
 
@@ -36,9 +38,12 @@ public class OrderService {
     }
 
     public void validateCartForOrder(Cart cart) {
-
         if (cart.getItems() == null || cart.getItems().isEmpty()) {
             throw new IllegalArgumentException("장바구니가 비어있습니다.");
+        }
+
+        if (cart.getOrderDate() != null) {
+            throw new IllegalArgumentException("이미 주문이 완료된 장바구니입니다.");
         }
     }
 
@@ -49,6 +54,10 @@ public class OrderService {
             OrderItem orderItem = createSingleOrderItem(cart, cartItem, customerEmail, address, zipcode);
             orderItems.add(orderItem);
         }
+
+        // 주문 완료 후 Cart를 사용된 상태로 마킹 (중복 주문 방지)
+        cart.setOrderDate(LocalDateTime.now());
+        cartRepository.save(cart);
 
         return orderRepository.saveAll(orderItems);
     }
