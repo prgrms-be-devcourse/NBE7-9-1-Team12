@@ -2,12 +2,12 @@ package com.mysite.cuffee.order.controller;
 
 import com.mysite.cuffee.cart.entity.Cart;
 import com.mysite.cuffee.cart.service.CartService;
-import com.mysite.cuffee.order.dto.CustomerDto;
 import com.mysite.cuffee.order.entity.OrderItem;
 import com.mysite.cuffee.order.service.OrderService;
 import com.mysite.global.exception.ServiceException;
 import com.mysite.global.rsData.RsData;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -25,21 +25,26 @@ public class OrderController {
 
     record OrderResponseBody(Long cartId, int totalAmount) {}
 
-    record PaymentRequest(@Valid CustomerDto customer, Long cartId) {}
+    record PaymentRequest(
+            @NotBlank @Email String customerEmail,
+            @NotBlank String address,
+            @NotBlank @Size(min = 5, max = 5) String zipcode,
+            @NotNull Long cartId
+    ) {}
 
     @PostMapping("/pay")
     @Transactional
     public RsData<OrderResponseBody> createOrder(
             @Valid @RequestBody PaymentRequest request){
 
-        orderService.findOrCreateCustomer(request.customer());
+        orderService.findOrCreateCustomer(request.customerEmail(), request.address(), request.zipcode());
 
         Cart cart = cartService.findByCartId(request.cartId())
                 .orElseThrow(() -> new ServiceException("404-1", "장바구니를 찾을 수 없습니다."));
 
-        orderService.validateCartOwner(cart, request.customer().getEmail());
+        orderService.validateCartOwner(cart, request.customerEmail());
 
-        List<OrderItem> orderItems = orderService.createOrderItems(cart, request.customer());
+        List<OrderItem> orderItems = orderService.createOrderItems(cart, request.customerEmail(), request.address(), request.zipcode());
 
         int totalAmount = orderItems.stream()
                 .mapToInt(OrderItem::getSubtotalPrice)

@@ -3,7 +3,6 @@ package com.mysite.cuffee.order.service;
 import com.mysite.cuffee.cart.entity.Cart;
 import com.mysite.cuffee.cart.entity.CartItem;
 import com.mysite.cuffee.cart.service.CartService;
-import com.mysite.cuffee.order.dto.CustomerDto;
 import com.mysite.cuffee.order.entity.Customer;
 import com.mysite.cuffee.order.entity.OrderItem;
 import com.mysite.cuffee.order.repository.CustomerRepository;
@@ -27,16 +26,16 @@ public class OrderService {
     private final CustomerRepository customerRepository;
 
 
-    public void findOrCreateCustomer(CustomerDto customerDto) {
-        customerRepository.findByEmail(customerDto.getEmail())
-                .orElseGet(() -> createCustomer(customerDto));
+    public void findOrCreateCustomer(String email, String address, String zipcode) {
+        customerRepository.findByEmail(email)
+                .orElseGet(() -> createCustomer(email, address, zipcode));
     }
 
-    public Customer createCustomer(CustomerDto customerDto) {
+    public Customer createCustomer(String email, String address, String zipcode) {
         Customer customer = new Customer();
-        customer.setEmail(customerDto.getEmail());
-        customer.setAddress(customerDto.getAddress());
-        customer.setZipcode(customerDto.getZipcode());
+        customer.setEmail(email);
+        customer.setAddress(address);
+        customer.setZipcode(zipcode);
         return customerRepository.save(customer);
     }
 
@@ -46,32 +45,32 @@ public class OrderService {
         }
     }
 
-    public List<OrderItem> createOrderItems(Cart cart, CustomerDto customerDto) {
+    public List<OrderItem> createOrderItems(Cart cart, String customerEmail, String address, String zipcode) {
         List<OrderItem> orderItems = new ArrayList<>();
 
         for (CartItem cartItem : cart.getItems()) {
-            OrderItem orderItem = createSingleOrderItem(cart, cartItem, customerDto);
+            OrderItem orderItem = createSingleOrderItem(cart, cartItem, customerEmail, address, zipcode);
             orderItems.add(orderItem);
         }
 
         return orderRepository.saveAll(orderItems);
     }
 
-    private OrderItem createSingleOrderItem(Cart cart, CartItem cartItem, CustomerDto customerDto) {
+    private OrderItem createSingleOrderItem(Cart cart, CartItem cartItem, String customerEmail, String address, String zipcode) {
         Coffee coffee = coffeeRepository.findById(cartItem.getProductId())
                 .orElseThrow(() -> new IllegalArgumentException("커피 상품을 찾을 수 없습니다."));
 
         OrderItem orderItem = new OrderItem();
         orderItem.setCart(cart);
-        orderItem.setCustomerEmail(customerDto.getEmail());
+        orderItem.setCustomerEmail(customerEmail);
         orderItem.setCoffee(coffee);
         orderItem.setQuantity(cartItem.getQty());
         orderItem.setSubtotalPrice(cartItem.getUnitPrice() * cartItem.getQty());
         orderItem.setCreateDate(LocalDateTime.now());
 
         // 주소 스냅샷 저장 (OrderItem에 주문 당시 주소 정보 보관)
-        orderItem.setShipToAddress(customerDto.getAddress());
-        orderItem.setShipToZipcode(customerDto.getZipcode());
+        orderItem.setShipToAddress(address);
+        orderItem.setShipToZipcode(zipcode);
 
         return orderItem;
     }
