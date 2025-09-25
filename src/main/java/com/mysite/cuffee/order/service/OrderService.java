@@ -46,31 +46,32 @@ public class OrderService {
         }
     }
 
-    public List<OrderItem> createOrderItems(Cart cart, String address, String zipcode) {
+    public List<OrderItem> createOrderItems(Cart cart, CustomerDto customerDto) {
         List<OrderItem> orderItems = new ArrayList<>();
 
         for (CartItem cartItem : cart.getItems()) {
-            OrderItem orderItem = createSingleOrderItem(cart, cartItem, address, zipcode);
+            OrderItem orderItem = createSingleOrderItem(cart, cartItem, customerDto);
             orderItems.add(orderItem);
         }
 
         return orderRepository.saveAll(orderItems);
     }
 
-    private OrderItem createSingleOrderItem(Cart cart, CartItem cartItem, String address, String zipcode) {
+    private OrderItem createSingleOrderItem(Cart cart, CartItem cartItem, CustomerDto customerDto) {
         Coffee coffee = coffeeRepository.findById(cartItem.getProductId())
                 .orElseThrow(() -> new IllegalArgumentException("커피 상품을 찾을 수 없습니다."));
 
         OrderItem orderItem = new OrderItem();
         orderItem.setCart(cart);
+        orderItem.setCustomerEmail(customerDto.getEmail());
         orderItem.setCoffee(coffee);
         orderItem.setQuantity(cartItem.getQty());
         orderItem.setSubtotalPrice(cartItem.getUnitPrice() * cartItem.getQty());
         orderItem.setCreateDate(LocalDateTime.now());
 
         // 주소 스냅샷 저장 (OrderItem에 주문 당시 주소 정보 보관)
-        orderItem.setShipToAddress(address);
-        orderItem.setShipToZipcode(zipcode);
+        orderItem.setShipToAddress(customerDto.getAddress());
+        orderItem.setShipToZipcode(customerDto.getZipcode());
 
         return orderItem;
     }

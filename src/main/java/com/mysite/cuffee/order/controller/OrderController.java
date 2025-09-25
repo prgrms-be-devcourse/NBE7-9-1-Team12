@@ -39,7 +39,7 @@ public class OrderController {
 
         orderService.validateCartOwner(cart, request.customer().getEmail());
 
-        List<OrderItem> orderItems = orderService.createOrderItems(cart, request.customer().getAddress(), request.customer().getZipcode());
+        List<OrderItem> orderItems = orderService.createOrderItems(cart, request.customer());
 
         int totalAmount = orderItems.stream()
                 .mapToInt(OrderItem::getSubtotalPrice)

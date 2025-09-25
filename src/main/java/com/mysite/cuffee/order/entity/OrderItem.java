@@ -23,6 +23,8 @@ public class OrderItem {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
+    private String customerEmail;
+
     @ManyToOne
     @JoinColumn(name = "coffee_id")
     private Coffee coffee;
