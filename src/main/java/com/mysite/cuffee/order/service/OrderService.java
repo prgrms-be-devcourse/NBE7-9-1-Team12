@@ -2,30 +2,23 @@ package com.mysite.cuffee.order.service;
 
 import com.mysite.cuffee.cart.entity.Cart;
 import com.mysite.cuffee.cart.entity.CartItem;
-import com.mysite.cuffee.cart.repository.CartRepository;
 import com.mysite.cuffee.cart.service.CartService;
 import com.mysite.cuffee.order.entity.Customer;
 import com.mysite.cuffee.order.entity.OrderItem;
 import com.mysite.cuffee.order.repository.CustomerRepository;
 import com.mysite.cuffee.order.repository.OrderRepository;
-import com.mysite.cuffee.products.entity.Coffee;
-import com.mysite.cuffee.products.repository.CoffeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final CoffeeRepository coffeeRepository;
-    private final CartService cartService;
-    private final CartRepository cartRepository;
     private final CustomerRepository customerRepository;
 
 
