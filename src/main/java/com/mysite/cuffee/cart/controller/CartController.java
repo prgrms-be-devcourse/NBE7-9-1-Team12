@@ -32,11 +32,25 @@ public class CartController {
                 )
         );
     }
+
+    record AddToCartReqBody(long cartId, long productId) {
+    }
+    @PostMapping("/carts/items")
+    public RsData<String> addCartItem(
+            @RequestBody AddToCartReqBody reqBody
+    ) {
+        cartService.addCartItem(reqBody.cartId(), reqBody.productId());
+
+        return new RsData<>(
+                "201-2",
+                "상품이 장바구니에 추가되었습니다."
+        );
+    }
     @DeleteMapping("/carts/items/{id}")
     public RsData<String> removeCartItem(
-            @PathVariable("id") long id
+            @PathVariable("id") long productId
     ) {
-        cartService.removeCartItem(id);
+        cartService.removeCartItem(productId);
         return new RsData<>(
                 "200-1",
                 "장바구니 아이템이 삭제되었습니다."
@@ -45,9 +59,9 @@ public class CartController {
 
     @PostMapping("/carts/items/{id}/increase")
     public RsData<String> increaseItemQty(
-            @PathVariable("id") long id
+            @PathVariable("id") long productId
     ) {
-        cartService.increaseItemQuantity(id);
+        cartService.increaseItemQuantity(productId);
         return new RsData<>(
                 "200-2",
                 "상품 수량이 1 증가되었습니다."
@@ -56,9 +70,9 @@ public class CartController {
 
     @PostMapping("/carts/items/{id}/decrease")
     public RsData<String> decreaseQty(
-            @PathVariable("id") long id
+            @PathVariable("id") long productId
     ) {
-        cartService.decreaseItemQuantity(id);
+        cartService.decreaseItemQuantity(productId);
         return new RsData<>(
                 "200-3",
                 "상품 수량이 1 감소되었습니다."

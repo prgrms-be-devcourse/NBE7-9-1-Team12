@@ -6,6 +6,7 @@ import com.mysite.cuffee.cart.repository.CartItemRepository;
 import com.mysite.cuffee.cart.repository.CartRepository;
 import com.mysite.cuffee.products.entity.Coffee;
 import com.mysite.cuffee.products.repository.CoffeeRepository;
+import com.mysite.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,22 +50,42 @@ public class CartService {
         return cart.getItems();
     }
 
-    public void removeCartItem(long id) {
-        if (!cartItemRepository.existsById(id)) {
-            throw new IllegalArgumentException("해당 아이템을 찾을 수 없습니다: " + id);
-        }
-        cartItemRepository.deleteById(id);
+    // 장바구니에 상품 추가 (체크표시)
+    public void addCartItem(long cartId, long productId) {
+        cartItemRepository.findByCartIdAndProductId(cartId, productId).ifPresent(item -> {
+            throw new IllegalStateException("이미 장바구니에 담긴 상품입니다.");
+        });
+
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new IllegalArgumentException("장바구니가 존재하지 않습니다. ID: " + cartId));
+
+        Coffee coffee = coffeeRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 커피가 존재하지 않습니다. ID: " + productId));
+
+        CartItem newItem = CreateItem(cart, coffee);
+
+        cartItemRepository.save(newItem);
     }
 
-    public void increaseItemQuantity(long id) {
-        CartItem item = cartItemRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("장바구니에 해당 상품이 없습니다. ID: " + id));
+    // 장바구니 아이템 삭제 (체크표시 해제)
+    public void removeCartItem(long productId) {
+        if (!cartItemRepository.existsById(productId)) {
+            throw new IllegalArgumentException("해당 아이템을 찾을 수 없습니다. ID: " + productId);
+        }
+        cartItemRepository.deleteById(productId);
+    }
+
+    // 장바구니 아이템 수량 증가
+    public void increaseItemQuantity(long productId) {
+        CartItem item = cartItemRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("장바구니에 해당 상품이 없습니다. ID: " + productId));
         item.setQty(item.getQty() + 1);
     }
 
-    public void decreaseItemQuantity(long id) {
-        CartItem item = cartItemRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("장바구니에 해당 상품이 없습니다. ID: " + id));
+    // 장바구니 아이템 수량 감소
+    public void decreaseItemQuantity(long productId) {
+        CartItem item = cartItemRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("장바구니에 해당 상품이 없습니다. ID: " + productId));
         if (item.getQty() > 1) {
             item.setQty(item.getQty() - 1);
         } else {

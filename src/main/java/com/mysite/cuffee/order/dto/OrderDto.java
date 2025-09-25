@@ -10,6 +10,7 @@ import lombok.Setter;
 public class OrderDto {
 
     @NotNull(message = "장바구니 ID는 필수입니다.")
+
     private Long cartId;
 
     @NotNull(message = "커피 ID는 필수입니다.")
