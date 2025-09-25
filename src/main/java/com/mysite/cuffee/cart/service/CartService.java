@@ -68,24 +68,24 @@ public class CartService {
     }
 
     // 장바구니 아이템 삭제 (체크표시 해제)
-    public void removeCartItem(long productId) {
-        if (!cartItemRepository.existsById(productId)) {
-            throw new IllegalArgumentException("해당 아이템을 찾을 수 없습니다. ID: " + productId);
-        }
-        cartItemRepository.deleteById(productId);
+    public void removeCartItem(long cartId, long productId) {
+        CartItem item = cartItemRepository.findByCartIdAndProductId(cartId, productId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 아이템을 찾을 수 없습니다. 상품 ID: " + productId + ", 장바구니 ID: " + cartId));
+
+        cartItemRepository.delete(item);
     }
 
     // 장바구니 아이템 수량 증가
-    public void increaseItemQuantity(long productId) {
-        CartItem item = cartItemRepository.findByProductId(productId)
-                .orElseThrow(() -> new IllegalArgumentException("장바구니에 해당 상품이 없습니다. ID: " + productId));
+    public void increaseItemQuantity(long cartId, long productId) {
+        CartItem item = cartItemRepository.findByCartIdAndProductId(cartId, productId)
+                .orElseThrow(() -> new IllegalArgumentException("장바구니에 해당 상품이 없습니다. 상품 ID: " + productId + ", 장바구니 ID: " + cartId));
         item.setQty(item.getQty() + 1);
     }
 
     // 장바구니 아이템 수량 감소
-    public void decreaseItemQuantity(long productId) {
-        CartItem item = cartItemRepository.findByProductId(productId)
-                .orElseThrow(() -> new IllegalArgumentException("장바구니에 해당 상품이 없습니다. ID: " + productId));
+    public void decreaseItemQuantity(long cartId, long productId) {
+        CartItem item = cartItemRepository.findByCartIdAndProductId(cartId, productId)
+                .orElseThrow(() -> new IllegalArgumentException("장바구니에 해당 상품이 없습니다. 상품 ID: " + productId + ", 장바구니 ID: " + cartId));
         if (item.getQty() > 1) {
             item.setQty(item.getQty() - 1);
         } else {
