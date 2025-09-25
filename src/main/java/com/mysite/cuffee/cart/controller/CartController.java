@@ -46,6 +46,8 @@ public class CartController {
                 "상품이 장바구니에 추가되었습니다."
         );
     }
+
+
     @DeleteMapping("/carts/{cartId}/items/{id}")
     public RsData<String> removeCartItem(
             @PathVariable("cartId") long cartId,
@@ -114,6 +116,18 @@ public class CartController {
                         lines,
                         cart.totalPrice()
                 )
+        );
+    }
+
+    @PostMapping("/carts/{cartId}/email")
+    public RsData<Void> setOwnerEmail(
+            @PathVariable("cartId") long cartId,
+            @RequestBody String ownerEmail
+    ){
+        cartService.setOwnerEmail(cartId, ownerEmail);
+        return new RsData<>(
+                "200-2",
+                "이메일이 등록되었습니다."
         );
     }
 }
