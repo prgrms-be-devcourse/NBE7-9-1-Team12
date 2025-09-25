@@ -114,20 +114,19 @@ public class CartController {
                 "장바구니 요약 입니다.",
                 new GetCartSummaryResBody(
                         lines,
-                        cart.totalPrice()
+                        cartService.totalPrice(cart)
                 )
         );
     }
 
-    @PostMapping("/carts/{cartId}/email")
-    public RsData<Void> setOwnerEmail(
-            @PathVariable("cartId") long cartId,
-            @RequestBody String ownerEmail
+    @PostMapping("/carts/{cartId}/date")
+    public RsData<Void> setOrderDate(
+            @PathVariable("cartId") long cartId
     ){
-        cartService.setOwnerEmail(cartId, ownerEmail);
+        cartService.setOrderDate(cartId);
         return new RsData<>(
                 "200-2",
-                "이메일이 등록되었습니다."
+                "주문 날짜가 등록되었습니다."
         );
     }
 }

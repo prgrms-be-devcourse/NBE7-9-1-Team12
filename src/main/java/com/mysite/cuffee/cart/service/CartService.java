@@ -49,9 +49,9 @@ public class CartService {
         return cart.getItems();
     }
 
-    public void setOwnerEmail(Long cartId, String ownerEmail) {
+    public void setOrderDate(Long cartId) {
         Cart cart = cartRepository.findById(cartId).get();
-        cart.setOwnerEmail(ownerEmail);
+        cart.setOrderDate();
     }
 
     // 장바구니에 상품 추가 (체크표시)

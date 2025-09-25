@@ -47,6 +47,12 @@ public class OrderService {
         }
     }
 
+    public void validateCartOwner(Cart cart, String customerEmail) {
+        if (cart.getCustomer() != null && !cart.getCustomer().getEmail().equals(customerEmail)) {
+            throw new IllegalArgumentException("장바구니 소유자가 일치하지 않습니다.");
+        }
+    }
+
     public List<OrderItem> createOrderItems(Cart cart, String customerEmail, String address, String zipcode) {
         List<OrderItem> orderItems = new ArrayList<>();
 
