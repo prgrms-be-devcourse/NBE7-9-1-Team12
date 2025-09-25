@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,9 +50,9 @@ public class CartService {
         return cart.getItems();
     }
 
-    public void setOwnerEmail(Long cartId, String ownerEmail) {
+    public void setOwnerEmailAndOrderDate(Long cartId, String ownerEmail) {
         Cart cart = cartRepository.findById(cartId).get();
-        cart.setOwnerEmail(ownerEmail);
+        cart.setOwnerEmailAndOrderDate(ownerEmail);
     }
 
     // 장바구니에 상품 추가 (체크표시)

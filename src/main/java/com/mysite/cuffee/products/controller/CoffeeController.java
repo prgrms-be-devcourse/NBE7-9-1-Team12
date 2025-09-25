@@ -17,7 +17,7 @@ public class CoffeeController {
         this.coffeeService = coffeeService;
     }
 
-    @GetMapping
+    @GetMapping("/products")
     public RsData<List<CoffeeResponseDto>> getAllCoffees() {
         return coffeeService.getAllCoffees();
     }
