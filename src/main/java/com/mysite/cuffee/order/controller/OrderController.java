@@ -1,16 +1,16 @@
 package com.mysite.cuffee.order.controller;
 
-import com.mysite.cuffee.order.dto.OrderDto;
+import com.mysite.cuffee.cart.entity.Cart;
+import com.mysite.cuffee.cart.service.CartService;
+import com.mysite.cuffee.order.dto.CustomerDto;
 import com.mysite.cuffee.order.entity.OrderItem;
-import com.mysite.cuffee.order.repository.OrderRepository;
 import com.mysite.cuffee.order.service.OrderService;
+import com.mysite.global.exception.ServiceException;
 import com.mysite.global.rsData.RsData;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,13 +21,25 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+    private final CartService cartService;
 
-    record OrderResponseBody(Long cartId, int totalAmount, int itemCount) {}
+    record OrderResponseBody(Long cartId, int totalAmount) {}
+
+    record PaymentRequest(@Valid CustomerDto customer, Long cartId) {}
 
     @PostMapping("/pay")
-    public RsData<OrderResponseBody> createOrder(@Valid @RequestBody OrderDto orderDto){
+    @Transactional
+    public RsData<OrderResponseBody> createOrder(
+            @Valid @RequestBody PaymentRequest request){
 
-        List<OrderItem> orderItems = orderService.createOrder(orderDto);
+        orderService.findOrCreateCustomer(request.customer());
+
+        Cart cart = cartService.findByCartId(request.cartId())
+                .orElseThrow(() -> new ServiceException("404-1", "장바구니를 찾을 수 없습니다."));
+
+        orderService.validateCartOwner(cart, request.customer().getEmail());
+
+        List<OrderItem> orderItems = orderService.createOrderItems(cart, request.customer().getAddress(), request.customer().getZipcode());
 
         int totalAmount = orderItems.stream()
                 .mapToInt(OrderItem::getSubtotalPrice)
@@ -37,11 +49,9 @@ public class OrderController {
                 "201-1",
                 "주문이 성공적으로 완료되었습니다.",
                 new OrderResponseBody(
-                        orderDto.getCartId(),
-                        totalAmount,
-                        orderItems.size()
+                        request.cartId(),
+                        totalAmount
                 )
         );
     }
-
 }

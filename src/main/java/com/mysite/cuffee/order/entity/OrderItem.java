@@ -33,4 +33,8 @@ public class OrderItem {
 
     private LocalDateTime createDate;
 
+    // 주문 당시 주소 스냅샷 (고객 정보 변경과 무관하게 보관)
+    private String shipToAddress;
+    private String shipToZipcode;
+
 }
