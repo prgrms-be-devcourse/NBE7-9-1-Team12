@@ -75,7 +75,7 @@ public class CartController {
         cartService.decreaseItemQuantity(productId);
         return new RsData<>(
                 "200-3",
-                "상품 수량이 1 감소되었습니다."
+                "상품 수량이 1 감소되었습니다. ID: " + productId
         );
     }
 
