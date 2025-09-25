@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -120,15 +119,14 @@ public class CartController {
         );
     }
 
-    @PostMapping("/carts/{cartId}/email")
-    public RsData<Void> setOwnerEmail(
-            @PathVariable("cartId") long cartId,
-            @RequestBody String ownerEmail
+    @PostMapping("/carts/{cartId}/date")
+    public RsData<Void> setOrderDate(
+            @PathVariable("cartId") long cartId
     ){
-        cartService.setOwnerEmailAndOrderDate(cartId, ownerEmail);
+        cartService.setOrderDate(cartId);
         return new RsData<>(
                 "200-2",
-                "이메일이 등록되었습니다."
+                "주문 날짜가 등록되었습니다."
         );
     }
 }

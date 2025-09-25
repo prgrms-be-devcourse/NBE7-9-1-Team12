@@ -40,7 +40,7 @@ public class OrderService {
     }
 
     public void validateCartOwner(Cart cart, String customerEmail) {
-        if (cart.getOwnerEmail() != null && !cart.getOwnerEmail().equals(customerEmail)) {
+        if (cart.getCustomer() != null && !cart.getCustomer().equals(customerEmail)) {
             throw new IllegalArgumentException("장바구니 소유자가 일치하지 않습니다.");
         }
     }
