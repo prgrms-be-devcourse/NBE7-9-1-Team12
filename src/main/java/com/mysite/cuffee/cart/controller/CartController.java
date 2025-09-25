@@ -20,9 +20,6 @@ public class CartController {
     record NewCartResBody(Long cartId) {
     }
 
-    record AddToCartReqBody(long cartId, long productId) {
-    }
-
     @PostMapping("/carts")
     public RsData<NewCartResBody> createCart() {
         Cart newCart = cartService.createCart();
@@ -36,6 +33,8 @@ public class CartController {
         );
     }
 
+    record AddToCartReqBody(long cartId, long productId) {
+    }
     @PostMapping("/carts/items")
     public RsData<String> addCartItem(
             @RequestBody AddToCartReqBody reqBody

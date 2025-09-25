@@ -60,7 +60,7 @@ public class CartService {
                 .orElseThrow(() -> new IllegalArgumentException("장바구니가 존재하지 않습니다. ID: " + cartId));
 
         Coffee coffee = coffeeRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException(productId + "번 커피가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 커피가 존재하지 않습니다. ID: " + productId));
 
         CartItem newItem = CreateItem(cart, coffee);
 
@@ -70,7 +70,7 @@ public class CartService {
     // 장바구니 아이템 삭제 (체크표시 해제)
     public void removeCartItem(long productId) {
         if (!cartItemRepository.existsById(productId)) {
-            throw new IllegalArgumentException("해당 아이템을 찾을 수 없습니다: " + productId);
+            throw new IllegalArgumentException("해당 아이템을 찾을 수 없습니다. ID: " + productId);
         }
         cartItemRepository.deleteById(productId);
     }
