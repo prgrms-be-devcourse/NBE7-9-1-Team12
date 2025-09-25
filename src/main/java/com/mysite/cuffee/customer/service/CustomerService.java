@@ -1,16 +1,11 @@
 package com.mysite.cuffee.customer.service;
 
-import com.mysite.cuffee.cart.entity.Cart;
-import com.mysite.cuffee.cart.entity.CartItem;
 import com.mysite.cuffee.cart.repository.CartRepository;
 import com.mysite.cuffee.customer.entity.Customer;
 import com.mysite.cuffee.customer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service

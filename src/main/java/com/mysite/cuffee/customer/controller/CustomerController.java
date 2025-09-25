@@ -5,15 +5,12 @@ import com.mysite.cuffee.cart.repository.CartRepository;
 import com.mysite.cuffee.cart.service.CartService;
 import com.mysite.cuffee.customer.entity.Customer;
 import com.mysite.cuffee.customer.service.CustomerService;
-import com.mysite.global.exception.ServiceException;
 import com.mysite.global.rsData.RsData;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -24,8 +21,6 @@ public class CustomerController {
     private final CustomerService customerService;
     private final CartService cartService;
     private final CartRepository cartRepository;
-
-    record OrderResponseBody(Long cartId, int totalAmount) {}
 
     record PaymentRequest(
             @NotBlank @Email String customerEmail,
@@ -42,6 +37,7 @@ public class CustomerController {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow();
         cart.setCustomer(customer);
+        cartRepository.save(cart);
 
         return new RsData<>(
                 "201-1",

@@ -1,6 +1,6 @@
 package com.mysite.cuffee.cart.entity;
 
-import com.mysite.cuffee.order.entity.Customer;
+import com.mysite.cuffee.customer.entity.Customer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

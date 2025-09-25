@@ -15,7 +15,6 @@ public class Customer{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerId;
 
-    @Column(unique = true)
     private String email;
 
     private String address;
