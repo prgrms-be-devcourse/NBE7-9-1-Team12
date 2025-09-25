@@ -13,6 +13,7 @@ public class OrderDto {
     @NotNull
     private String customerEmail;
 
+<<<<<<< HEAD
     @NotEmpty
     private String address;
 
@@ -20,5 +21,9 @@ public class OrderDto {
     private String zipcode;
 
     @NotNull
+=======
+    @NotNull(message = "장바구니 ID는 필수입니다.")
+
+>>>>>>> origin/main
     private Long cartId;
 }
