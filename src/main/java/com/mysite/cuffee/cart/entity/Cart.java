@@ -28,7 +28,8 @@ public class Cart{
         return items.stream().mapToInt(i -> i.getUnitPrice() * i.getQty()).sum();
     }
 
-    public void setOwnerEmail(String ownerEmail) {
+    public void setOwnerEmailAndOrderDate(String ownerEmail) {
         this.ownerEmail = ownerEmail;
+        this.orderDate = LocalDateTime.now();
     }
 }

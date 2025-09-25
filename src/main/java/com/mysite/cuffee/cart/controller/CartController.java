@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -114,7 +115,7 @@ public class CartController {
                 "장바구니 요약 입니다.",
                 new GetCartSummaryResBody(
                         lines,
-                        cart.totalPrice()
+                        cartService.totalPrice(cart)
                 )
         );
     }
@@ -124,7 +125,7 @@ public class CartController {
             @PathVariable("cartId") long cartId,
             @RequestBody String ownerEmail
     ){
-        cartService.setOwnerEmail(cartId, ownerEmail);
+        cartService.setOwnerEmailAndOrderDate(cartId, ownerEmail);
         return new RsData<>(
                 "200-2",
                 "이메일이 등록되었습니다."
