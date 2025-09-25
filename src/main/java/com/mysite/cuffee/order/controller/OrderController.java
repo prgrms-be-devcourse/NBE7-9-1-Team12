@@ -28,21 +28,21 @@ public class OrderController {
     record PaymentRequest(
             @NotBlank @Email String customerEmail,
             @NotBlank String address,
-            @NotBlank @Size(min = 5, max = 5) String zipcode,
-            @NotNull Long cartId
+            @NotBlank @Size(min = 5, max = 5) String zipcode
     ) {}
 
-    @PostMapping("/pay")
+    @PostMapping("/carts/{cartId}/pay")
     @Transactional
     public RsData<OrderResponseBody> createOrder(
+            @PathVariable Long cartId,
             @Valid @RequestBody PaymentRequest request){
 
         orderService.findOrCreateCustomer(request.customerEmail(), request.address(), request.zipcode());
 
-        Cart cart = cartService.findByCartId(request.cartId())
+        Cart cart = cartService.findByCartId(cartId)
                 .orElseThrow(() -> new ServiceException("404-1", "장바구니를 찾을 수 없습니다."));
 
-        orderService.validateCartOwner(cart, request.customerEmail());
+        orderService.validateCartForOrder(cart);
 
         List<OrderItem> orderItems = orderService.createOrderItems(cart, request.customerEmail(), request.address(), request.zipcode());
 
@@ -52,11 +52,7 @@ public class OrderController {
 
         return new RsData<>(
                 "201-1",
-                "주문이 성공적으로 완료되었습니다.",
-                new OrderResponseBody(
-                        request.cartId(),
-                        totalAmount
-                )
+                "주문이 성공적으로 완료되었습니다."
         );
     }
 }

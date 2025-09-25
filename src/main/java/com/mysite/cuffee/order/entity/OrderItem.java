@@ -19,15 +19,11 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderItemId;
 
-    @ManyToOne
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
-
     private String customerEmail;
 
-    @ManyToOne
-    @JoinColumn(name = "coffee_id")
-    private Coffee coffee;
+    private Long cartId;
+
+    private Long coffeeId;
 
     private int quantity;
 

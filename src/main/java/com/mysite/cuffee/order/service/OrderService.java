@@ -2,6 +2,7 @@ package com.mysite.cuffee.order.service;
 
 import com.mysite.cuffee.cart.entity.Cart;
 import com.mysite.cuffee.cart.entity.CartItem;
+import com.mysite.cuffee.cart.repository.CartRepository;
 import com.mysite.cuffee.cart.service.CartService;
 import com.mysite.cuffee.order.entity.Customer;
 import com.mysite.cuffee.order.entity.OrderItem;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -23,6 +25,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CoffeeRepository coffeeRepository;
     private final CartService cartService;
+    private final CartRepository cartRepository;
     private final CustomerRepository customerRepository;
 
 
@@ -39,9 +42,10 @@ public class OrderService {
         return customerRepository.save(customer);
     }
 
-    public void validateCartOwner(Cart cart, String customerEmail) {
-        if (cart.getCustomer() != null && !cart.getCustomer().getEmail().equals(customerEmail)) {
-            throw new IllegalArgumentException("장바구니 소유자가 일치하지 않습니다.");
+    public void validateCartForOrder(Cart cart) {
+
+        if (cart.getItems() == null || cart.getItems().isEmpty()) {
+            throw new IllegalArgumentException("장바구니가 비어있습니다.");
         }
     }
 
@@ -57,13 +61,10 @@ public class OrderService {
     }
 
     private OrderItem createSingleOrderItem(Cart cart, CartItem cartItem, String customerEmail, String address, String zipcode) {
-        Coffee coffee = coffeeRepository.findById(cartItem.getProductId())
-                .orElseThrow(() -> new IllegalArgumentException("커피 상품을 찾을 수 없습니다."));
-
         OrderItem orderItem = new OrderItem();
-        orderItem.setCart(cart);
+        orderItem.setCartId(cart.getId());
         orderItem.setCustomerEmail(customerEmail);
-        orderItem.setCoffee(coffee);
+        orderItem.setCoffeeId(cartItem.getProductId());
         orderItem.setQuantity(cartItem.getQty());
         orderItem.setSubtotalPrice(cartItem.getUnitPrice() * cartItem.getQty());
         orderItem.setCreateDate(LocalDateTime.now());
@@ -74,5 +75,4 @@ public class OrderService {
 
         return orderItem;
     }
-
 }
