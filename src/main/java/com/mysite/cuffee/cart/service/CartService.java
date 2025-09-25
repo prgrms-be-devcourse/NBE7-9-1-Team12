@@ -6,7 +6,6 @@ import com.mysite.cuffee.cart.repository.CartItemRepository;
 import com.mysite.cuffee.cart.repository.CartRepository;
 import com.mysite.cuffee.products.entity.Coffee;
 import com.mysite.cuffee.products.repository.CoffeeRepository;
-import com.mysite.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +47,11 @@ public class CartService {
 
     public List<CartItem> getCartItems(Cart cart) {
         return cart.getItems();
+    }
+
+    public void setOwnerEmail(Long cartId, String ownerEmail) {
+        Cart cart = cartRepository.findById(cartId).get();
+        cart.setOwnerEmail(ownerEmail);
     }
 
     // 장바구니에 상품 추가 (체크표시)
