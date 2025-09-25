@@ -46,29 +46,29 @@ public class CartController {
                 "상품이 장바구니에 추가되었습니다."
         );
     }
-    @DeleteMapping("/carts/items/{id}")
+    @DeleteMapping("/carts/{cartId}/items/{id}")
     public RsData<String> removeCartItem(
             @PathVariable("id") long productId
     ) {
         cartService.removeCartItem(productId);
         return new RsData<>(
                 "200-1",
-                "장바구니 아이템이 삭제되었습니다."
+                "상품이 삭제되었습니다. ID: " + productId
         );
     }
 
-    @PostMapping("/carts/items/{id}/increase")
+    @PostMapping("/carts/{cartId}/items/{id}/increase")
     public RsData<String> increaseItemQty(
             @PathVariable("id") long productId
     ) {
         cartService.increaseItemQuantity(productId);
         return new RsData<>(
                 "200-2",
-                "상품 수량이 1 증가되었습니다."
+                "상품 수량이 1 증가되었습니다. ID: " + productId
         );
     }
 
-    @PostMapping("/carts/items/{id}/decrease")
+    @PostMapping("/carts/{cartId}/items/{id}/decrease")
     public RsData<String> decreaseQty(
             @PathVariable("id") long productId
     ) {
