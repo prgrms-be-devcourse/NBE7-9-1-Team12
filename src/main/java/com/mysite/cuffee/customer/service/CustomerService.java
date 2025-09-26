@@ -11,10 +11,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerService {
 
-    private final CartRepository cartRepository;
     private final CustomerRepository customerRepository;
 
-    public Customer saveCustomer(String customerEmail, String address, String zipcode) {
-        return customerRepository.save(new Customer(customerEmail, address, zipcode));
+    public Customer findOrCreateCustomer(String customerEmail, String address, String zipcode) {
+        return customerRepository.findByEmailAndAddressAndZipcode(customerEmail, address, zipcode)
+                .orElseGet(() -> customerRepository.save(new Customer(customerEmail, address, zipcode)));
     }
+
 }

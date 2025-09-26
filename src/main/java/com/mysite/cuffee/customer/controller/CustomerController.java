@@ -33,7 +33,7 @@ public class CustomerController {
             @PathVariable Long cartId,
             @Valid @RequestBody PaymentRequest rqBody){
 
-        Customer customer = customerService.saveCustomer(rqBody.customerEmail, rqBody.address, rqBody.zipcode);
+        Customer customer = customerService.findOrCreateCustomer(rqBody.customerEmail, rqBody.address, rqBody.zipcode);
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow();
         cart.setCustomer(customer);
