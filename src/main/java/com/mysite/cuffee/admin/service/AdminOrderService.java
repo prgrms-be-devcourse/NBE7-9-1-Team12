@@ -2,8 +2,9 @@
 package com.mysite.cuffee.admin.service;
 
 import com.mysite.cuffee.admin.dto.AdminOrderDto;
-import com.mysite.cuffee.order.entity.OrderItem;
-import com.mysite.cuffee.order.repository.OrderRepository;
+import com.mysite.cuffee.cart.entity.Cart;
+import com.mysite.cuffee.cart.repository.CartRepository;
+import com.mysite.cuffee.customer.entity.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,51 +20,50 @@ import java.util.stream.Collectors;
 // 관리자 주문 서비스
 public class AdminOrderService {
 
-    private final OrderRepository orderRepository;
+    private final CartRepository cartRepository;
 
     public List<AdminOrderDto.OrderResponse> findAllOrders() {
-        List<OrderItem> allOrderItems = orderRepository.findAll();
+        List<Cart> allOrders = cartRepository.findAll().stream()
+                .filter(cart -> cart.getOrderDate() != null)
+                .collect(Collectors.toList());
 
-        Map<Long, List<OrderItem>> groupedByCartId = allOrderItems.stream()
-                .collect(Collectors.groupingBy(item -> item.getCart().getId()));
+        List<AdminOrderDto.OrderResponse> orderResponses = allOrders.stream()
+                .map(cart -> {
+                    //주문자 정보 추출
+                    Customer customer = cart.getCustomer();
 
-        List<AdminOrderDto.OrderResponse> orderResponses = new ArrayList<>();
-        for (Map.Entry<Long, List<OrderItem>> entry : groupedByCartId.entrySet()) {
-            Long cartId = entry.getKey();
-            List<OrderItem> itemsInOrder = entry.getValue();
+                    String customerEmail = (customer != null) ? customer.getEmail() : "N/A";
+                    String shipToAddress = (customer != null) ? customer.getAddress() : "N/A";
+                    String shipToZipcode = (customer != null) ? customer.getZipcode() : "N/A";
 
-            OrderItem representativeItem = itemsInOrder.get(0);
+                    // 주문 상품 목록 생성
+                    List<AdminOrderDto.OrderItemResponse> itemDtos = cart.getItems().stream()
+                            .map(item -> new AdminOrderDto.OrderItemResponse(
+                                    item.getId(), // CartItem ID를 OrderItem ID로 사용
+                                    item.getProductId(),
+                                    item.getProductName(),
+                                    item.getQty(),
+                                    item.getUnitPrice(),
+                                    item.getUnitPrice() * item.getQty() // subtotalPrice
+                            ))
+                            .collect(Collectors.toList());
 
-            // record 생성자로 변경: .builder() -> new AdminOrderDto.OrderItemResponse(...)
-            List<AdminOrderDto.OrderItemResponse> itemDtos = itemsInOrder.stream()
-                    .map(item -> new AdminOrderDto.OrderItemResponse(
-                            item.getOrderItemId(),
-                            item.getCoffee().getCoffeeId(),
-                            item.getCoffee().getName(),
-                            item.getQuantity(),
-                            item.getSubtotalPrice() / item.getQuantity(),
-                            item.getSubtotalPrice()
-                    ))
-                    .collect(Collectors.toList());
+                    int totalAmount = cart.totalPrice();
 
-            int totalAmount = itemDtos.stream()
-                    .mapToInt(AdminOrderDto.OrderItemResponse::subtotalPrice)
-                    .sum();
-
-            // record 생성자로 변경: .builder() -> new AdminOrderDto.OrderResponse(...)
-            orderResponses.add(
-                    new AdminOrderDto.OrderResponse(
-                            cartId,
-                            representativeItem.getCustomerEmail(),
-                            representativeItem.getShipToAddress(),
-                            representativeItem.getShipToZipcode(),
-                            representativeItem.getCreateDate(),
+                    // 추출된 모든 정보 조합 후 Cart ID를 Order ID로 사용하는 OrderResponse 생성
+                    return new AdminOrderDto.OrderResponse(
+                            cart.getId(),
+                            customerEmail,
+                            shipToAddress,
+                            shipToZipcode,
+                            cart.getOrderDate(),
                             itemDtos,
                             totalAmount
-                    )
-            );
-        }
+                    );
+                })
+                .collect(Collectors.toList());
 
         return orderResponses;
+
     }
 }
