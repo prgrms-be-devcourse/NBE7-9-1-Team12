@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +25,25 @@ public class AdminOrderService {
     private final CartRepository cartRepository;
 
     public List<AdminOrderDto.OrderResponse> findAllOrders() {
-        List<Cart> allOrders = cartRepository.findAll().stream()
-                .filter(cart -> cart.getOrderDate() != null)
-                .collect(Collectors.toList());
+        return mapCartsToOrderResponses(
+                cartRepository.findAll().stream()
+                        .filter(cart -> cart.getOrderDate() != null)
+                        .collect(Collectors.toList())
+        );
+    }
 
-        List<AdminOrderDto.OrderResponse> orderResponses = allOrders.stream()
+
+    public List<AdminOrderDto.OrderResponse> findDailyBatchOrders() {
+        LocalDateTime batchEndTime = LocalDateTime.now().with(LocalTime.of(14, 0, 0));
+        LocalDateTime batchStartTime = batchEndTime.minusDays(1);
+
+        return mapCartsToOrderResponses(
+                cartRepository.findByOrderDateBetween(batchStartTime, batchEndTime)
+        );
+    }
+
+    private List<AdminOrderDto.OrderResponse> mapCartsToOrderResponses(List<Cart> carts) {
+        return carts.stream()
                 .map(cart -> {
                     //주문자 정보 추출
                     Customer customer = cart.getCustomer();
@@ -62,8 +78,5 @@ public class AdminOrderService {
                     );
                 })
                 .collect(Collectors.toList());
-
-        return orderResponses;
-
     }
 }
