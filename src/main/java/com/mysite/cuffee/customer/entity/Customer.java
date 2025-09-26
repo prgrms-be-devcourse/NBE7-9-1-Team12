@@ -19,8 +19,8 @@ public class Customer{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerId;
 
-    @OneToMany
-    private Cart cart;
+    @OneToMany(mappedBy = "customer")
+    private List<Cart> carts = new ArrayList<>();
 
     private String email;
 
