@@ -51,7 +51,13 @@ public class CoffeeService {
                 coffee.getName(),
                 coffee.getPrice(),
                 coffee.getContents(),
+                coffee.getStock(),
                 coffee.getImageUrl()
         );
+    }
+
+    public void addProduct(String name, int price, String contents, String imageUrl, int stock) {
+        Coffee coffee = new Coffee(name, price, contents, imageUrl, stock);
+        coffeeRepository.save(coffee);
     }
 }
