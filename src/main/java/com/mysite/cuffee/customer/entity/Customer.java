@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Table(indexes = @Index(name = "idx_customer_unique", columnList = "email, address, zipcode"))
 public class Customer{
 
     @Id
