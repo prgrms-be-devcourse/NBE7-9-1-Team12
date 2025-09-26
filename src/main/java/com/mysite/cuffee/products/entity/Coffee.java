@@ -1,7 +1,10 @@
 package com.mysite.cuffee.products.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -27,4 +30,14 @@ public class Coffee {
     @Column(name = "image_url", length = 500)
     private String imageUrl;
 
+    @Column(nullable = false)
+    private int stock;
+
+    public Coffee(String name, int price, String contents, String imageUrl, int stock) {
+        this.name = name;
+        this.price = price;
+        this.contents = contents;
+        this.imageUrl = imageUrl;
+        this.stock = stock;
+    }
 }

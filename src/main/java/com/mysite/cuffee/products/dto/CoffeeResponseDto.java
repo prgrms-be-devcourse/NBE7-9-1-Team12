@@ -12,5 +12,6 @@ public class CoffeeResponseDto {
     private String name;
     private int price;
     private String contents;
+    private int stock;
     private String imageUrl;
 }
