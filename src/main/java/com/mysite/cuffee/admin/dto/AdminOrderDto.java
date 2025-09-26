@@ -1,6 +1,5 @@
 package com.mysite.cuffee.admin.dto;
 
-import com.mysite.cuffee.order.entity.OrderItem;
 import lombok.Builder;
 import lombok.Getter;
 
