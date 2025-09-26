@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerService {
 
-    private final CartRepository cartRepository;
     private final CustomerRepository customerRepository;
 
     public Customer saveCustomer(String customerEmail, String address, String zipcode) {
