@@ -17,7 +17,9 @@ public class AdminAuthController {
     private final AdminAuthService adminAuthService;
 
     @PostMapping("/login")
-    public AdminAuthDto.LoginResponse login(@RequestBody AdminAuthDto.LoginRequest req) {
+    public AdminAuthDto.LoginResponse login(
+            @RequestBody AdminAuthDto.LoginRequest req
+    ) {
         return adminAuthService.login(req);
     }
 }
