@@ -10,7 +10,7 @@ import java.util.Map;
 @Service
 public class AdminAuthService {
 
-    private final String secret = "my-secret-key"; // application.yml에서 @Value로 주입 권장
+    private final String secret = "my-super-secret-key-for-jwt-authentication";
 
     //사용자가 로그인 요청하면, username과 password 입력
     public AdminAuthDto.LoginResponse login(AdminAuthDto.LoginRequest req) {
