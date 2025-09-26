@@ -1,5 +1,6 @@
 package com.mysite.cuffee.products.controller;
 
+import com.mysite.cuffee.media.service.MediaService;
 import com.mysite.cuffee.products.dto.CoffeeResponseDto;
 import com.mysite.cuffee.products.entity.Coffee;
 import com.mysite.cuffee.products.service.CoffeeService;
@@ -20,6 +21,7 @@ import java.util.List;
 public class CoffeeController {
 
     private final CoffeeService coffeeService;
+    private final MediaService mediaService;
 
     @GetMapping("/products")
     public RsData<List<CoffeeResponseDto>> getAllCoffees() {
@@ -80,10 +82,16 @@ public class CoffeeController {
     }
 
     @DeleteMapping("/products/{coffeeId}")
-    public RsData<Void> DeleteProduct(
+    public RsData<Void> deleteProduct(
             @PathVariable long coffeeId
     ){
         Coffee coffee = coffeeService.findById(coffeeId);
+        String imageUrl = coffee.getImageUrl();
+
+        if (imageUrl != null && !imageUrl.isBlank()) {
+            mediaService.deleteByImageUrl(imageUrl);
+        }
+
         coffeeService.deleteProduct(coffee);
         return new RsData<>(
                 "204-1",
