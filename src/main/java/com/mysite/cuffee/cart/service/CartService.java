@@ -50,7 +50,18 @@ public class CartService {
     }
 
     public void setOrderDate(Long cartId) {
-        Cart cart = cartRepository.findById(cartId).get();
+        //기존: carId만 받으면 바로 setOrderDate() 호출하는 문제
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new IllegalArgumentException("장바구니가 존재하지 않습니다. ID: " + cartId));
+
+        if(cart.getCustomer() == null) {
+            throw new IllegalStateException("장바구니에 고객 정보가 없습니다.");
+        }
+
+        if (cart.getItems().isEmpty()) {
+            throw new IllegalStateException("장바구니에 담긴 상품이 없습니다.");
+        }
+
         cart.setOrderDate();
     }
 
