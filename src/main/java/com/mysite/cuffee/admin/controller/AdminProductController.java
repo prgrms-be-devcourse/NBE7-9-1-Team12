@@ -14,7 +14,9 @@ public class AdminProductController {
 
     private final AdminProductService adminProductService;
     @PostMapping
-    public RsData<String> createProduct(@RequestBody AdminProductDto.CreateRequest request) {
+    public RsData<Void> createProduct(
+            @RequestBody AdminProductDto.CreateRequest request
+    ) {
         adminProductService.createProduct(request);
         return new RsData<>(
                 "201-0",
@@ -23,7 +25,9 @@ public class AdminProductController {
     }
 
     @DeleteMapping("/{productId}")
-    public RsData<String> deleteProduct(@PathVariable Long productId) {
+    public RsData<Void> deleteProduct(
+            @PathVariable Long productId
+    ) {
         adminProductService.deleteProduct(productId);
         return new RsData<>(
                 "200-0",

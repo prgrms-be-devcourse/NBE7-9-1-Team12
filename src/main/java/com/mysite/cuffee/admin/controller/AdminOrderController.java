@@ -30,6 +30,15 @@ public class AdminOrderController {
         );
     }
 
+    @GetMapping("/dailyBatch")
+    public RsData<List<AdminOrderDto.OrderResponse>> findDailyBatchOrders() {
+        List<AdminOrderDto.OrderResponse> orders = adminOrderService.findDailyBatchOrders();
+        return new RsData<>(
+                "200-2",
+                "일일 배송 대상 주문 조회 성공",
+                orders
+        );
+    }
 
 
 
