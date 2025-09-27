@@ -18,7 +18,6 @@ import java.util.List;
 public class AdminOrderController {
 
     private final AdminOrderService adminOrderService;
-
     @GetMapping
     public RsData<List<AdminOrderDto.OrderResponse>> findAllOrders() {
         List<AdminOrderDto.OrderResponse> orders = adminOrderService.findAllOrders();
