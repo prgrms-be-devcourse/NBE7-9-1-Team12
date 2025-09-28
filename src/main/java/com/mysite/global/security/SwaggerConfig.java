@@ -1,4 +1,4 @@
-package com.mysite.cuffee.security;
+package com.mysite.global.security;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
