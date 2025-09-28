@@ -15,7 +15,7 @@ public class AdminProductService {
     public final CoffeeRepository coffeeRepository;
 
     public void createProduct(AdminProductDto.CreateRequest request) {
-        if (!coffeeRepository.existsByName(request.name())) {
+        if (coffeeRepository.existsByName(request.name())) {
             throw new IllegalStateException("이미 존재하는 원두 이름입니다.");
         }
 
@@ -24,6 +24,7 @@ public class AdminProductService {
         newCoffee.setContents(request.contents());
         newCoffee.setPrice(request.price());
         newCoffee.setImageUrl(request.imageUrl());
+        // newCoffee.setStock(request.stock());
 
         coffeeRepository.save(newCoffee);
     }
@@ -34,5 +35,12 @@ public class AdminProductService {
         }
 
         coffeeRepository.deleteById(productId);
+    }
+
+    public void updateStock(Long productId, int stock) {
+        Coffee coffee = coffeeRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 상품을 찾을 수 없습니다: " + productId));
+
+        coffee.setStock(stock);
     }
 }

@@ -30,8 +30,20 @@ public class AdminProductController {
     ) {
         adminProductService.deleteProduct(productId);
         return new RsData<>(
-                "200-0",
+                "200-1",
                 "상품이 성공적으로 삭제되었습니다."
+        );
+    }
+
+    @PatchMapping("/{productId}/stock")
+    public RsData<Void> updateStock(
+            @PathVariable Long productId,
+            @RequestBody AdminProductDto.UpdateStockRequest request
+    ) {
+        adminProductService.updateStock(productId, request.stock());
+        return new RsData<>(
+                "200-2",
+                "상품 재고가 성공적으로 업데이트되었습니다."
         );
     }
 }
