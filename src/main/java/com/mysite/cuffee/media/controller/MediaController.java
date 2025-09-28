@@ -17,15 +17,24 @@ public class MediaController {
     public record UploadRes(String imageUrl) {}
 
     @PostMapping(value = "/products/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public RsData<UploadRes> upload(@RequestPart("file") MultipartFile file) {
-        String imageUrl = mediaService.saveToResources(file); // /images/<uuid>.<ext>
+    public RsData<UploadRes> uploadImg(@RequestPart("file") MultipartFile file) {
+        String imageUrl = mediaService.uploadImg(file); // /images/<uuid>.<ext>
         return new RsData<>("201-1", "이미지 업로드 성공", new UploadRes(imageUrl));
     }
 
     @DeleteMapping("/products/image")
-    public RsData<Void> deleteByImageUrl(@RequestParam String imageUrl) {
-        mediaService.deleteByImageUrl(imageUrl);
+    public RsData<Void> deleteImg(@RequestParam String imageUrl) {
+        mediaService.deleteImg(imageUrl);
         return new RsData<>("204-1", "이미지 삭제 성공");
     }
 
+
+    @PutMapping(value = "/products/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public RsData<UploadRes> modifyImg(
+            @RequestPart("file") MultipartFile file,
+            @RequestPart("oldImageUrl") String oldImageUrl
+    ) {
+        String newUrl = mediaService.modifyImg(file, oldImageUrl);
+        return new RsData<>("200-2", "이미지 수정 성공", new UploadRes(newUrl));
+    }
 }
