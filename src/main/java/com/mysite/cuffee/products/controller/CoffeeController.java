@@ -82,20 +82,17 @@ public class CoffeeController {
     }
 
     @DeleteMapping("/products/{coffeeId}")
-    public RsData<Void> deleteProduct(
+    public RsData<String> deleteProduct(
             @PathVariable long coffeeId
     ){
         Coffee coffee = coffeeService.findById(coffeeId);
         String imageUrl = coffee.getImageUrl();
 
-        if (imageUrl != null && !imageUrl.isBlank()) {
-            mediaService.deleteByImageUrl(imageUrl);
-        }
-
         coffeeService.deleteProduct(coffee);
         return new RsData<>(
                 "204-1",
-                "제품이 삭제 되었습니다."
+                "제품이 삭제 되었습니다.",
+                imageUrl
         );
     }
 }
