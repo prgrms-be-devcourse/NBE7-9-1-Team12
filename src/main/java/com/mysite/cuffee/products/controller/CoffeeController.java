@@ -62,7 +62,7 @@ public class CoffeeController {
         );
     }
 
-    record CoffeeRequest(
+    record addCoffeeRequest(
             @NotBlank String name,
             @Positive int price,
             @NotBlank String contents,
@@ -72,7 +72,7 @@ public class CoffeeController {
 
     @PostMapping("/products/add")
     public RsData<Void> addProduct(
-            @Valid @RequestBody CoffeeRequest rqBody
+            @Valid @RequestBody addCoffeeRequest rqBody
     ){
         coffeeService.addProduct(rqBody.name, rqBody.price, rqBody.contents, rqBody.imageUrl, rqBody.stock);
         return new RsData<>(
@@ -93,6 +93,36 @@ public class CoffeeController {
                 "204-1",
                 "제품이 삭제 되었습니다.",
                 imageUrl
+        );
+    }
+
+    record modifyCoffeeRequest(
+            @NotBlank String name,
+            @Positive int price,
+            @NotBlank String contents,
+            @NotBlank String imageUrl,
+            @PositiveOrZero int stock
+    ) {}
+
+    @PutMapping("/products/{coffeeId}")
+    public RsData<CoffeeResponseDto> modifyProduct(
+            @PathVariable long coffeeId,
+            @Valid @RequestBody modifyCoffeeRequest rqBody
+    ){
+        Coffee coffee = coffeeService.findById(coffeeId);
+        coffeeService.modifyProduct(coffee, rqBody.name, rqBody.price, rqBody.contents, rqBody.imageUrl, rqBody.stock);
+
+        return new RsData<>(
+                "200-1",
+                "제품이 수정 되었습니다.",
+                new CoffeeResponseDto(
+                        coffee.getCoffeeId(),
+                        coffee.getName(),
+                        coffee.getPrice(),
+                        coffee.getContents(),
+                        coffee.getStock(),
+                        coffee.getImageUrl()
+                )
         );
     }
 }

@@ -20,7 +20,7 @@ public class MediaService {
 
     private static final Set<String> ALLOWED = Set.of("jpg","jpeg","png","gif","webp");
 
-    public String saveToResources(MultipartFile file) {
+    public String uploadImg(MultipartFile file) {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("빈 파일입니다.");
         }
@@ -48,7 +48,7 @@ public class MediaService {
         return (i < 0) ? "" : name.substring(i + 1).toLowerCase();
     }
 
-    public boolean deleteByImageUrl(String imageUrlOrFileName) {
+    public boolean deleteImg(String imageUrlOrFileName) {
         if (!StringUtils.hasText(imageUrlOrFileName)) return false;
 
         String lower = imageUrlOrFileName.toLowerCase();
@@ -56,18 +56,25 @@ public class MediaService {
 
         String name = imageUrlOrFileName.trim();
         if (name.startsWith("/images/")) name = name.substring("/images/".length());
-        if (name.startsWith("/")) return false; // /images/가 아닌 다른 절대경로는 거부
+        if (name.startsWith("/")) return false;
 
         if (name.contains("/") || name.contains("..")) return false;
 
         try {
             Files.createDirectories(imagesDir);
             Path target = imagesDir.resolve(name).normalize();
-            if (!target.startsWith(imagesDir)) return false; // 폴더 이탈 방지
+            if (!target.startsWith(imagesDir)) return false;
             return Files.deleteIfExists(target);
         } catch (IOException e) {
             System.err.println("이미지 삭제 실패: " + e.getMessage());
             return false;
         }
+    }
+
+    public String modifyImg(MultipartFile newFile, String oldImageUrlOrFileName) {
+        String newImageUrl = uploadImg(newFile);
+        deleteImg(oldImageUrlOrFileName);
+
+        return newImageUrl;
     }
 }
