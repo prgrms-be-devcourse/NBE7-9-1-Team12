@@ -37,4 +37,13 @@ public class CoffeeService {
     public void deleteProduct(Coffee coffee) {
         coffeeRepository.delete(coffee);
     }
+
+    public void modifyProduct(Coffee coffee, String name, int price, String contents, String imageUrl, int stock) {
+        coffee.setName(name);
+        coffee.setPrice(price);
+        coffee.setContents(contents);
+        coffee.setImageUrl(imageUrl);
+        coffee.setStock(stock);
+        coffeeRepository.save(coffee);
+    }
 }
