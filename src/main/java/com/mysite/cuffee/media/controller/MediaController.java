@@ -1,5 +1,6 @@
 package com.mysite.cuffee.media.controller;
 
+import com.mysite.cuffee.media.dto.UploadRes;
 import com.mysite.cuffee.media.service.MediaService;
 import com.mysite.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class MediaController {
 
     private final MediaService mediaService;
-
-    public record UploadRes(String imageUrl) {}
 
     @PostMapping(value = "/products/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public RsData<UploadRes> uploadImg(@RequestPart("file") MultipartFile file) {
