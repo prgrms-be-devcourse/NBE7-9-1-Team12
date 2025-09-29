@@ -24,26 +24,4 @@ public class CoffeeService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coffee not found"));
         return entity;
     }
-
-    public void addProduct(String name, int price, String contents, String imageUrl, int stock) {
-        Coffee coffee = new Coffee(name, price, contents, imageUrl, stock);
-        coffeeRepository.save(coffee);
-    }
-
-    public Coffee findById(long coffeeId) {
-        return coffeeRepository.findById(coffeeId).get();
-    }
-
-    public void deleteProduct(Coffee coffee) {
-        coffeeRepository.delete(coffee);
-    }
-
-    public void modifyProduct(Coffee coffee, String name, int price, String contents, String imageUrl, int stock) {
-        coffee.setName(name);
-        coffee.setPrice(price);
-        coffee.setContents(contents);
-        coffee.setImageUrl(imageUrl);
-        coffee.setStock(stock);
-        coffeeRepository.save(coffee);
-    }
 }

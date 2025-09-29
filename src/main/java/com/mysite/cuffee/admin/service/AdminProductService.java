@@ -14,33 +14,26 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdminProductService {
     public final CoffeeRepository coffeeRepository;
 
-    public void createProduct(AdminProductDto.CreateRequest request) {
-        if (coffeeRepository.existsByName(request.name())) {
-            throw new IllegalStateException("이미 존재하는 원두 이름입니다.");
-        }
-
-        Coffee newCoffee = new Coffee();
-        newCoffee.setName(request.name());
-        newCoffee.setContents(request.contents());
-        newCoffee.setPrice(request.price());
-        newCoffee.setImageUrl(request.imageUrl());
-        // newCoffee.setStock(request.stock());
-
-        coffeeRepository.save(newCoffee);
+    public void addProduct(String name, int price, String contents, String imageUrl, int stock) {
+        Coffee coffee = new Coffee(name, price, contents, imageUrl, stock);
+        coffeeRepository.save(coffee);
     }
 
-    public void deleteProduct(Long productId) {
-        if (!coffeeRepository.existsById(productId)) {
-            throw new IllegalArgumentException("해당 ID의 상품을 찾을 수 없습니다: " + productId);
-        }
-
-        coffeeRepository.deleteById(productId);
+    public Coffee findById(long coffeeId) {
+        return coffeeRepository.findById(coffeeId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 상품을 찾을 수 없습니다: " + coffeeId));
     }
 
-    public void updateStock(Long productId, int stock) {
-        Coffee coffee = coffeeRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 상품을 찾을 수 없습니다: " + productId));
+    public void deleteProduct(Coffee coffee) {
+        coffeeRepository.delete(coffee);
+    }
 
+    public void modifyProduct(Coffee coffee, String name, int price, String contents, String imageUrl, int stock) {
+        coffee.setName(name);
+        coffee.setPrice(price);
+        coffee.setContents(contents);
+        coffee.setImageUrl(imageUrl);
         coffee.setStock(stock);
+        coffeeRepository.save(coffee);
     }
 }
