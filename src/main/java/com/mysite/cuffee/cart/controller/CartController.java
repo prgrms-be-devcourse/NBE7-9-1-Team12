@@ -1,5 +1,7 @@
 package com.mysite.cuffee.cart.controller;
 
+import com.mysite.cuffee.cart.dto.CartDtoReq;
+import com.mysite.cuffee.cart.dto.CartDtoRes;
 import com.mysite.cuffee.cart.entity.Cart;
 import com.mysite.cuffee.cart.service.CartService;
 import com.mysite.global.exception.ServiceException;
@@ -17,27 +19,24 @@ public class CartController {
 
     private final CartService cartService;
 
-    record NewCartResBody(Long cartId) {
-    }
 
     @PostMapping("/carts")
-    public RsData<NewCartResBody> createCart() {
+    public RsData<CartDtoReq.NewCartResBody> createCart() {
         Cart newCart = cartService.createCart();
         Long cartId = newCart.getId();
         return new RsData<>(
                 "201-1",
                 "새로운 장바구니가 생성되었습니다.",
-                new NewCartResBody(
+                new CartDtoReq.NewCartResBody(
                         cartId
                 )
         );
     }
 
-    record AddToCartReqBody(long cartId, long productId) {
-    }
+
     @PostMapping("/carts/items")
     public RsData<Void> addCartItem(
-            @RequestBody AddToCartReqBody reqBody
+            @RequestBody CartDtoReq.AddToCartReqBody reqBody
     ) {
         cartService.addCartItem(reqBody.cartId(), reqBody.productId());
 
@@ -84,22 +83,18 @@ public class CartController {
         );
     }
 
-    record ItemLine(Long itemId, Long productId, String name, int unitPrice, int qty, int lineTotal) {
-    }
 
-    record GetCartSummaryResBody(List<ItemLine> items, int totalAmount) {
-    }
 
     @GetMapping("/carts/{cartId}/summary")
     @Transactional(readOnly = true)
-    public RsData<GetCartSummaryResBody> getCartItem(
+    public RsData<CartDtoRes.GetCartSummaryResBody> getCartItem(
             @PathVariable Long cartId
     ) {
         Cart cart = cartService.findByCartId(cartId)
                 .orElseThrow(() -> new ServiceException("404-1", "장바구니가 없습니다."));
 
-        List<ItemLine> lines = cartService.getCartItems(cart).stream()
-                .map(i -> new ItemLine(
+        List<CartDtoRes.ItemLine> lines = cartService.getCartItems(cart).stream()
+                .map(i -> new CartDtoRes.ItemLine(
                         i.getId(),
                         i.getProductId(),
                         i.getProductName(),
@@ -112,7 +107,7 @@ public class CartController {
         return new RsData<>(
                 "200-1",
                 "장바구니 요약 입니다.",
-                new GetCartSummaryResBody(
+                new CartDtoRes.GetCartSummaryResBody(
                         lines,
                         cartService.totalPrice(cart)
                 )
