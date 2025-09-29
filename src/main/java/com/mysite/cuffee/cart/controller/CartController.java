@@ -61,7 +61,7 @@ public class CartController {
     }
 
     @PostMapping("/carts/{cartId}/items/{id}/increase")
-    public RsData<String> increaseItemQty(
+    public RsData<Void> increaseItemQty(
             @PathVariable("cartId") long cartId,
             @PathVariable("id") long productId
     ) {
