@@ -19,7 +19,6 @@ public class CartController {
 
     private final CartService cartService;
 
-
     @PostMapping("/carts")
     public RsData<CartDtoReq.NewCartResBody> createCart() {
         Cart newCart = cartService.createCart();
@@ -59,6 +58,7 @@ public class CartController {
         );
     }
 
+
     @PostMapping("/carts/{cartId}/items/{id}/increase")
     public RsData<Void> increaseItemQty(
             @PathVariable("cartId") long cartId,
@@ -71,6 +71,7 @@ public class CartController {
         );
     }
 
+
     @PostMapping("/carts/{cartId}/items/{id}/decrease")
     public RsData<Void> decreaseQty(
             @PathVariable("cartId") long cartId,
@@ -82,7 +83,6 @@ public class CartController {
                 "상품 수량이 1 감소되었습니다. ID: " + productId
         );
     }
-
 
 
     @GetMapping("/carts/{cartId}/summary")
@@ -114,10 +114,11 @@ public class CartController {
         );
     }
 
+
     @PostMapping("/carts/{cartId}/date")
     public RsData<Void> setOrderDate(
             @PathVariable("cartId") long cartId
-    ){
+    ) {
         cartService.setOrderDate(cartId);
         return new RsData<>(
                 "200-2",
