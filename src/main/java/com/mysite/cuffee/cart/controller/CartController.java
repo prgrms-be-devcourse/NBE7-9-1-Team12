@@ -36,7 +36,7 @@ public class CartController {
     record AddToCartReqBody(long cartId, long productId) {
     }
     @PostMapping("/carts/items")
-    public RsData<String> addCartItem(
+    public RsData<Void> addCartItem(
             @RequestBody AddToCartReqBody reqBody
     ) {
         cartService.addCartItem(reqBody.cartId(), reqBody.productId());
@@ -49,7 +49,7 @@ public class CartController {
 
 
     @DeleteMapping("/carts/{cartId}/items/{id}")
-    public RsData<String> removeCartItem(
+    public RsData<Void> removeCartItem(
             @PathVariable("cartId") long cartId,
             @PathVariable("id") long productId
     ) {
@@ -73,7 +73,7 @@ public class CartController {
     }
 
     @PostMapping("/carts/{cartId}/items/{id}/decrease")
-    public RsData<String> decreaseQty(
+    public RsData<Void> decreaseQty(
             @PathVariable("cartId") long cartId,
             @PathVariable("id") long productId
     ) {
