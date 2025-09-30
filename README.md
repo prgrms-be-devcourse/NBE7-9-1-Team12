@@ -19,7 +19,7 @@
 ## 팀원
 |[김예진](https://github.com/dpwls8984)|[박종원](https://github.com/premierbell)|[백승범](https://github.com/BackSeungBeom)|
 |:-:|:-:|:-:|
-|<img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/7686f2dd-8ca1-47d5-be94-79ac13d508b4" />|<img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/119343d0-8415-4162-a98d-b8d51320e018" />|<img width="150" height="1500" alt="image" src="https://github.com/user-attachments/assets/862d833d-3c95-439e-8167-c3d2bb1bf4eb" />|
+|<img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/7686f2dd-8ca1-47d5-be94-79ac13d508b4" />|<img width="150" height="190" alt="image" src="https://github.com/user-attachments/assets/7a33402b-8aeb-4b05-ae59-4f9ccd89a8b8" />|<img width="150" height="1500" alt="image" src="https://github.com/user-attachments/assets/dd44d225-a22c-47e3-8361-e7511f28a28c">|
 |BE|BE|FE,BE|
 
 
@@ -163,7 +163,7 @@ erDiagram
 
   CART_ITEM {
     LONG   id PK
-    LONG   product_Id
+    LONG   product_id
     STRING product_name
     INT    qty
     INT    unit_price
@@ -189,7 +189,7 @@ graph LR
 
     subgraph "저장소"
         H[MySQL Database]
-        I["Image Files<br>(제품 이미지)"]
+        I["Image Folder<br>(제품 이미지)"]
     end
 
     A -- "API 호출" --> B
@@ -247,15 +247,15 @@ flowchart TD
 ## 결과 페이지
 ### 상품 조회 및 주문 페이지
 > 사용자가 페이지에 진입했을 때 보이는 페이지입니다. 장바구니에 상품 조회/추가/삭제 및 수량 조절이 가능합니다.
-<img width="1466" height="895" alt="image" src="https://github.com/user-attachments/assets/3975b42d-f009-4783-9f24-b815bf1db01a" />
+<img width="1466" height="895" alt="image" src="https://github.com/user-attachments/assets/6457f521-2756-4faa-a302-d7056b6e8e4a" />
 
 ### 상품 주문
 > 사용자는 장바구니에 구매하고자 하는 상품을 담은 후 정보를 입력합니다. 이때 장바구니에 상품이 담겨져있고 사용자의 정보가 입력되어야 '결제하기' 버튼이 활성화됩니다.
-<img width="1466" height="895" alt="image" src="https://github.com/user-attachments/assets/0124c6c3-2d3c-4f88-9798-aa16e28e6a8b" />
+<img width="1466" height="895" alt="image" src="https://github.com/user-attachments/assets/01885471-fffb-4960-bebf-25f658af1b20" />
 
 ### [관리자] 로그인 페이지
 > 관리자 로그인 페이지입니다. 지정된 아이디/비밀번호로만 로그인이 가능합니다.
-<img width="1466" height="895" alt="image" src="https://github.com/user-attachments/assets/fab50cf0-b507-47f4-82fd-99a8e2a2d1ff" />
+<img width="1466" height="895" alt="image" src="https://github.com/user-attachments/assets/066f4562-f640-46b3-8683-9454e725a6b9" />
 
 ### [관리자] 주문 관리 페이지
 > 관리자 주문 관리 페이지입니다. 관리자는 전체 주문 내역을 조회 가능합니다.
@@ -267,11 +267,11 @@ flowchart TD
 
 ### [관리자] 상품 관리 페이지
 > 관리자 상품 관리 페이지입니다. 관리자는 전체 상품 목록을 조회 가능하며, 상품에 대한 정보를 수정 가능합니다.
-<img width="1466" height="895" alt="image" src="https://github.com/user-attachments/assets/00870e57-341c-4e2a-9294-8ad8f209fb42" />
+<img width="1466" height="895" alt="image" src="https://github.com/user-attachments/assets/b53ee858-61a1-42ba-a3fa-8a0ad7a1d09b" />
 
 ### [관리자] 상품 수정 페이지
 > '수정'버튼 클릭시 상품에 대한 세부 정보를 수정 할 수 있습니다.
-<img width="1466" height="895" alt="image" src="https://github.com/user-attachments/assets/9b154a37-b587-491b-b366-5396236a231c" />
+<img width="1466" height="895" alt="image" src="https://github.com/user-attachments/assets/4a5049c4-0bfe-4631-9c98-2367553b1bba" />
 
 ---
 
