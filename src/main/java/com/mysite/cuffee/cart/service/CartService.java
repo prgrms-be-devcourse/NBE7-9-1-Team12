@@ -1,0 +1,111 @@
+package com.mysite.cuffee.cart.service;
+
+import com.mysite.cuffee.cart.entity.Cart;
+import com.mysite.cuffee.cart.entity.CartItem;
+import com.mysite.cuffee.cart.repository.CartItemRepository;
+import com.mysite.cuffee.cart.repository.CartRepository;
+import com.mysite.cuffee.products.entity.Coffee;
+import com.mysite.cuffee.products.repository.CoffeeRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class CartService {
+    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
+    private final CoffeeRepository coffeeRepository;
+
+    public Cart createCart() {
+        Cart newCart = new Cart();
+        return cartRepository.save(newCart);
+    }
+
+    public CartItem CreateItem(Cart cart, Coffee coffee) {
+        CartItem newItem = new CartItem();
+        newItem.setCart(cart);
+        newItem.setProductId(coffee.getCoffeeId());
+        newItem.setProductName(coffee.getName());
+        newItem.setUnitPrice(coffee.getPrice());
+        newItem.setQty(1);
+        cart.getItems().add(newItem);
+        return newItem;
+    }
+
+    public int totalPrice(Cart cart) {
+        return cart.totalPrice();
+    }
+
+    public Optional<Cart> findByCartId(Long cartId) {
+        return cartRepository.findById(cartId);
+    }
+
+    public List<CartItem> getCartItems(Cart cart) {
+        return cart.getItems();
+    }
+
+    public void setOrderDate(Long cartId) {
+        //기존: carId만 받으면 바로 setOrderDate() 호출하는 문제
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new IllegalArgumentException("장바구니가 존재하지 않습니다. ID: " + cartId));
+
+        if(cart.getCustomer() == null) {
+            throw new IllegalStateException("장바구니에 고객 정보가 없습니다.");
+        }
+
+        if (cart.getItems().isEmpty()) {
+            throw new IllegalStateException("장바구니에 담긴 상품이 없습니다.");
+        }
+
+        cart.setOrderDate();
+    }
+
+    // 장바구니에 상품 추가 (체크표시)
+    public void addCartItem(long cartId, long productId) {
+        cartItemRepository.findByCartIdAndProductId(cartId, productId).ifPresent(item -> {
+            throw new IllegalStateException("이미 장바구니에 담긴 상품입니다.");
+        });
+
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new IllegalArgumentException("장바구니가 존재하지 않습니다. ID: " + cartId));
+
+        Coffee coffee = coffeeRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 커피가 존재하지 않습니다. ID: " + productId));
+
+        CartItem newItem = CreateItem(cart, coffee);
+
+        cartItemRepository.save(newItem);
+    }
+
+    // 장바구니 아이템 삭제 (체크표시 해제)
+    public void removeCartItem(long cartId, long productId) {
+        CartItem item = cartItemRepository.findByCartIdAndProductId(cartId, productId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 아이템을 찾을 수 없습니다. 상품 ID: " + productId + ", 장바구니 ID: " + cartId));
+
+        cartItemRepository.delete(item);
+    }
+
+    // 장바구니 아이템 수량 증가
+    public void increaseItemQuantity(long cartId, long productId) {
+        CartItem item = cartItemRepository.findByCartIdAndProductId(cartId, productId)
+                .orElseThrow(() -> new IllegalArgumentException("장바구니에 해당 상품이 없습니다. 상품 ID: " + productId + ", 장바구니 ID: " + cartId));
+        item.setQty(item.getQty() + 1);
+    }
+
+    // 장바구니 아이템 수량 감소
+    public void decreaseItemQuantity(long cartId, long productId) {
+        CartItem item = cartItemRepository.findByCartIdAndProductId(cartId, productId)
+                .orElseThrow(() -> new IllegalArgumentException("장바구니에 해당 상품이 없습니다. 상품 ID: " + productId + ", 장바구니 ID: " + cartId));
+        if (item.getQty() > 1) {
+            item.setQty(item.getQty() - 1);
+        } else {
+            cartItemRepository.delete(item);
+        }
+    }
+
+}
